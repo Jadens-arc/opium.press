@@ -4,6 +4,9 @@
 - PHP 8.1 or higher
 - Composer
 - A database (MariaDB recommended)
+- Symfony CLI
+- **For Production Environments**
+  - Apache or NGINX
 
 ### Steps
 > all commands should be run in the project directory
@@ -21,4 +24,8 @@ $ composer install
 3. Format Database
 ```shell
 $ php bin/console doctrine:schema:update --force
+```
+4. Run the server
+```shell
+$ Symfony server:start
 ```
