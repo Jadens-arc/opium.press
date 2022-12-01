@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta charset="UTF-8">
+        <meta name="description" content="Because people are addicted to their opinions">
+        <meta property="og:title" content="OPIUM.PRESS" />
+        <meta property="og:description" content="Share and read essays" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://opium.press" /> 
+        <meta property= "og:image" content="{{ asset('images/card.png') }}" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta
+          name="twitter:description"
+          content="Because people are addicted to their opinions"
+        />
+        <meta name="twitter:title" content="OPIUM.PRESS" />
+        <meta
+          name="twitter:image"
+          content="https://opium.press{{ asset('images/card.png') }}"
+        />
+        <link rel="apple-touch-icon" href="{{ asset('images/card.png') }}" />
+        <title>OPIUM.PRESS {% block title %}{% endblock %}</title>
+        <link rel="icon" href="{{ asset('images/Opium.svg') }}">
+        <link rel="apple-touch-icon" href="{{ asset('images/Opium.svg') }}" />
+        {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
+        {% block stylesheets %}
+            {{ encore_entry_link_tags('app') }}
+        {% endblock %}
+
+        <link rel="stylesheet" href="{{ asset('css/bootstrap.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+        <script defer src="{{ asset('css/bootstrap.js') }}"></script>
+    </head>
+    <body class="" style="min-height: 100vh">
+        <nav class="navbar navbar-expand-sm" style="margin-bottom: 20px">
+            <div class="container-lg d-flex">
+                <a class="navbar-brand" href="/"><img alt="Opium Logo" src="{{ asset('images/Opium.svg') }}" alt="" height="30" ></a>
+                <button
+                        class="navbar-toggler"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#navbarSupportedContent"
+                        aria-controls="navbarSupportedContent"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation"
+                >
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="{{ path('app_homepage') }}">Home</a>
+                        </li>
+                        {% if app.user %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ path('app_subscriptions') }}">Subscriptions</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ path('app_new_essay') }}">New Essay</a>
+                            </li>
+
+                        {% else %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ path('app_login') }}">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ path('app_register') }}">Sign Up</a>
+                            </li>
+                        {% endif %}
+                        {% if app.user %}
+                            {% if not is_granted('ROLE_ADMIN') %}
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ path('app_embargo') }}">Embargo</a>
+                                </li>
+                            {% endif %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ path('app_writer', {'username': app.user.username}) }}">My Profile</a>
+                            </li>
+                        {% endif %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('app_about') }}">About</a>
+                        </li>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ path('app_admin') }}">Admin</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+
+                    <form class="d-flex" type="search" method="get" action="/">
+                        <input
+                                class="form-control me-2"
+                                placeholder="Search Essays"
+                                id="searchInput"
+                                name="q"
+                                value="{{ app.request.query.get('q') }}"
+                        />
+                        <button
+                                class="btn btn-outline-primary"
+                                type="submit">
+                            Search
+                        </button>
+                    </form>
+
+                </div>
+            </div>
+        </nav>
+        <div class="body container-lg">
+            {% block content %}{% endblock %}
+        </div>
+        {% block javascripts %}
+            {{ encore_entry_script_tags('app') }}
+        {% endblock %}
+    </body>
+</html>
+
+

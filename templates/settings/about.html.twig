@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}| About{% endblock %}
+
+{% block content %}
+    <h2 class="text-center text-uppercase">OPIUM</h2>
+    <p class="text-center mb-5">"Because people are addicted to their own opinions"</p>
+
+    <div class="row">
+        <div class="mb-5 col-sm text-center">
+            <h3 class="text-muted">Made With Love By Jaden</h3>
+            <p>Follow the <a href="https://www.instagram.com/opium.press/">Instagram</a>
+                and follow the <a href="https://www.instagram.com/jaden.svg/">creator</a></p>
+            <p><a href="/terms-and-conditions">Terms and Conditions</a></p>
+            <p><a href="/privacy-policy">Privacy Policy</a></p>
+
+            <img style="max-width: 90vw;" src='{{ asset("images/Opium\ Large.svg") }}' alt="" srcset="">
+        </div>
+
+        <div class="mb-5 col-sm">
+            <h3 class="text-muted">The Rules</h3>
+            <p>Violating any of these will have your life and your account terminated permanently</p>
+            <p>
+                <ul class="text-md-start">
+                    <li>No publishing content that can get the website taken down. This includes…</li>
+                    <ul>
+                        <li>Copyrighted material</li>
+                        <li>Leaked confidential documents</li>
+                        <li>Essays that aim to directly insight violence</l1>
+                        <li>The other creep stuff that y’all come up with</li>
+                    </ul>
+                    <li>Only one account per user/entity</li>
+                    <li>No spamming</li>
+                    <li>No advertising</li>
+                </ul>
+            </p>
+            <h3 class="text-muted">The World According to Jaden</h3>
+            <p>
+                <ul class="text-md-start">
+                    <li>Images, videos, and bright colors are designed to be distracting and attention grabbing</li>
+                    <li>AI based timelines limit peoples view of the world</li>
+                    <li>Targeted advertising by selling user data are both immoral</li>
+                    <li>Time is a luxury... take advantage of it </li>
+                    <li>People should have an unbiased outlet to fully express themselves not constrained by...</li>
+                    <ul>
+                        <li>A 1x1 image</li>
+                        <li>A character limit</li>
+                        <li>A 3 minute timer</li>
+                        <li>Or an advertising driven business model</li>
+                    </ul>
+
+                </ul>
+            </p>
+            <h3 class="text-muted">Other Information</h3>
+            <p>
+                <ul class="text-md-start">
+                    <li>Timestamps based on LA</li>
+                    <li>LAMP stack</li>
+                    <li>Shoutout my great grandma</li>
+                    <li>FREE TRISTAN</li>
+                    <li>Chapter 1: Rehersal</li>
+                </ul>
+            </p>
+        </div>
+    </div>
+{% endblock %}

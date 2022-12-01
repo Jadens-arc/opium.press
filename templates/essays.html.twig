@@ -1,0 +1,66 @@
+{% if not posts and app.request.query.get('q') %}
+    <h2 class="text-center text-muted">Nothing found for {{  app.request.query.get('q') }}</h2>
+    <div class="text-center">
+        <a href="/" class="btn btn-primary">Go Back</a>
+    </div>
+{% endif %}
+{% for post in posts %}
+    <div class="card" id="{{ post.id }}" style="margin: 20px 0; overflow: visible">
+        <h6 class="card-header" style="cursor: pointer" onclick="window.location='{{ path('app_view_essay', {'id': post.id}) }}'">
+            <div class="col-sm d-flex flex-row" style="flex-grow: 1">
+                {% if app.user and is_granted('ROLE_ADMIN') %}
+                    <a href="{{ path('app_delete_essay', {'id': post.id}) }}">
+                        <img alt="Trash can" src="{{ asset('regular/trash-can.svg') }}" style="margin-right:20px; width: 1rem;" alt="">
+                    </a>
+                {% endif %}
+                <a href="{{ path('app_share_essay', {'id': post.id}) }}">
+                  <img alt="Instagram Logo" src="{{ asset('brands/instagram.svg') }}" style="margin-right:20px; width: 1rem;" alt="">
+                </a>
+                <a href="{{ path('app_writer', {"username": post.creatorUsername}) }}" 
+                    style="text-decoration:none;" class="d-block text-capitalize text-dark">{{ post.creatorName }}</a>
+                <a href="{{ path('app_writer', {"username": post.creatorUsername}) }}"
+                    class="d-block mx-2 fw-light text-muted">@{{ post.creatorUsername }}</a>
+            </div>
+            <div class="col-sm d-flex flex-row justify-content-end">
+                {# {% if app.user %}
+                    {% if post.id in saved %}
+                        <a href="{{ path('app_save', {'id': post.id}) }}">
+                            <img src="{{ asset('regular/bookmark.svg') }}" style="margin-left:20px; width: 0.8rem;" alt="">
+                        </a>
+                    {% else %}
+                        <a href="{{ path('app_save', {'id': post.id}) }}">
+                            <img src="{{ asset('solid/bookmark.svg') }}" style="margin-left:20px; width: 0.8rem;" alt="">
+                        </a>
+                    {% endif %}
+                {% endif %} #}
+                
+            </div>
+        </h6>
+        <div class="m-2">
+            <span class="d-block text-muted">{{ post.creationDate.format('Y-m-d H:i:s') | format_datetime(locale='en', timezone='America/Los_Angeles') }}</span>
+            {% for tag in post.tags %}
+                <a href="{{ path('app_homepage', {'q': '#' ~ tag}) }}"  style="text-decoration: none;" class="badge text-bg-primary mx-1">#{{ tag }}</></a>
+            {% endfor %}
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">{{ post.title }}</h5>
+            <div class="card-text">{{ post.content|nl2br }}</div>
+        </div>
+        {% if post.sources %}
+            <div class="card-footer">
+                <b>Sources:</b>
+                <ul class="mb-0">
+                    {% for source in post.sources %}
+                        <li>
+                            {% if "https://" in source or "http://" in source %}
+                                <a href="{{ source }}">{{ source }}</a>
+                            {% else %}
+                                <span class="m-0">{{ source }}</span>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+    </div>
+{% endfor %}

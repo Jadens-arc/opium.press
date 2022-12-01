@@ -1,0 +1,158 @@
+{% extends "base.html.twig" %}
+{% block title %}| New Essay{% endblock %}
+{% block content %}
+    <h1>New Essay</h1>
+    {{ form_start(form) }}
+        <div class="my-custom-class-for-errors">
+            {{ form_errors(form) }}
+        </div>
+        <div class="mb-3">
+            <label class="form-label">{{ form_label(form.title) }}</label>
+            {{ form_widget(form.title, {'attr': {'class': 'form-control'}}) }}
+        </div>
+
+        <div class="row">
+            <div class="col-sm">
+                <label class="form-label">{{ form_label(form.tagInput) }}</label>
+
+                <ul class="mb-3 list-group" id="tagList">
+                </ul>
+
+                <div class="mb-3">
+                    {{ form_widget(form.tagInput, {'attr': {'class': 'form-control', 'placeholder': 'ex: #hello (don\'t forget to hit enter)'}}) }}
+                </div>
+            </div>
+            <div class="col-sm">
+                <label class="form-label">{{ form_label(form.sourceInput) }}</label>
+
+                <ul class="mb-3 list-group" id="sourceList">
+                </ul>
+
+                <div class="mb-3">
+                    {{ form_widget(form.sourceInput, {'attr': {'class': 'form-control', 'placeholder': 'ex: https://google.com (don\'t forget to hit enter)'}}) }}
+                </div>
+            </div>
+        </div>
+
+
+        <div class="mb-3">
+            <label class="form-label">{{ form_label(form.content) }}</label>
+            {{ form_widget(form.content, {'attr': {'class': 'form-control', 'rows': '10'}}) }}
+        </div>
+
+        {{ form_row(form._token) }}
+        {{ form_widget(form.submit, {'attr': {'class': 'btn btn-primary mb-3'}}) }}
+
+    {{ form_end(form, {render_rest: false}) }}
+{% endblock %}
+
+{% block javascripts %}
+    <script defer>
+        let post_content = document.getElementById('post_content');
+        post_content.addEventListener('keydown', (e) => {
+            if (e.key == 'Tab') {
+                e.preventDefault();
+                let start = post_content.selectionStart;
+                let end = post_content.selectionEnd;
+
+                post_content.value = post_content.value.substring(0, start) +
+                    "\t" + post_content.value.substring(end);
+
+                post_content.selectionStart =
+                    post_content.selectionEnd = start + 1;
+            }
+        });
+
+        let post_tagInput = document.getElementById('post_tagInput');
+        let tagList = document.getElementById('tagList');
+
+        let tags = [];
+
+        function appendTag(tagName) {
+            tagName = tagName.replace('#', '');
+            tags.push(tagName);
+
+            let newTag = document.createElement('li');
+            newTag.innerText = "#" + tagName
+            newTag.classList.add('list-group-item')
+
+            newTag.addEventListener("mouseover", (e) => {
+                newTag.classList.add("list-group-item-danger")
+            })
+
+            newTag.addEventListener("mouseout", (e) => {
+                newTag.classList.remove("list-group-item-danger")
+            })
+
+            newTag.addEventListener("click", (e) => {
+                newTag.remove()
+                tags.splice(tags.length-1, 1)
+            })
+
+            tagList.appendChild(newTag)
+        }
+
+        post_tagInput.addEventListener('keypress', (e) => {
+            if (e.key === "Enter") {
+                e.preventDefault()
+                appendTag(post_tagInput.value)
+                post_tagInput.value = ""
+            }
+        })
+
+        let post_sourceInput = document.getElementById('post_sourceInput');
+        let sourceList = document.getElementById('sourceList');
+
+        let sources = [];
+
+        function appendSource(sourceName) {
+            sources.push(sourceName);
+
+            let newSource = document.createElement('li');
+            newSource.innerText = sourceName
+            newSource.classList.add('list-group-item')
+
+            newSource.addEventListener("mouseover", (e) => {
+                newSource.classList.add("list-group-item-danger")
+            })
+
+            newSource.addEventListener("mouseout", (e) => {
+                newSource.classList.remove("list-group-item-danger")
+            })
+
+            newSource.addEventListener("click", (e) => {
+                newSource.remove()
+                sources.splice(sources.length-1, 1)
+            })
+
+            sourceList.appendChild(newSource)
+        }
+
+        post_sourceInput.addEventListener('keypress', (e) => {
+            if (e.key === "Enter") {
+                e.preventDefault()
+                appendSource(post_sourceInput.value)
+                post_sourceInput.value = ""
+            }
+        })
+
+
+        document.addEventListener("submit", (e) => {
+            post_tagInput.value = ""
+            post_sourceInput.value = ""
+
+            tags.forEach((tag, index) => {
+                post_tagInput.value += tag;
+                if (index < tags.length - 1) {
+                    post_tagInput.value += ",";
+                }
+            })
+            sources.forEach((source, index) => {
+                post_sourceInput.value += source;
+                if (index < sources.length - 1) {
+                    post_sourceInput.value += ",";
+                }
+            })
+        })
+    </script>
+{% endblock %}

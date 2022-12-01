@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <h1>Hi Admin</h1>
+        <div class="row">
+            <div class="card col-sm m-2">
+                <div class="card-body">
+                    <h5 class="card-title">Users</h5>
+                    <p class="card-text">One account per entity. They make the content. Probably be nice to them</p>
+                    <a href="{{ path('app_admin_users') }}" class="btn btn-primary">Manage</a>
+                </div>
+            </div>
+            <div class="card col-sm m-2">
+                <div class="card-body">
+                    <h5 class="card-title">Posts</h5>
+                    <p class="card-text">Anyone can write about whatever they want. Let them express themselves</p>
+                    <a href="{{ path('app_admin_posts') }}" class="btn btn-primary">Manage</a>
+                </div>
+            </div>
+        </div>
+{% endblock %}

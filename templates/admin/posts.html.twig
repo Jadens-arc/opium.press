@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <h1>Posts</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Creator</th>
+                <th scope="col">Title</th>
+                <th scope="col">Date</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in rows %}
+                <tr>
+                    <th scope="row">{{ row.id }}</th>
+                    <td>{{ row.creatorUsername }}</td>
+                    <td>{{ row.title }}</td>
+                    <td>{{ row.creationDate.format('Y-m-d H:i:s') }}<td>
+                    <td>
+                        <a class="btn btn-danger" href="{{ path('app_delete_essay', {'id': row.id}) }}">Delete</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

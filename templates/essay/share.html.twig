@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <div class="text-center">
+        <img src="/shares/{{ post }}" height="500vh" class="rounded mb-5" style="filter: drop-shadow(5px 5px 10px grey)" >
+        <h1>Post the image</h1>
+        <h1>Use this link</h1>
+        <p class="alert alert-secondary">{{ url }}</p>
+    </div>
+{% endblock %}

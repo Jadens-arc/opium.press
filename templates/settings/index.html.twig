@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}| Settings{% endblock %}
+
+{% block content %}
+    <div class="d-flex justify-content-between">
+        <h1>Settings</h1>
+        <div>
+            <a class="btn btn-danger my-2" href="{{ path('app_delete_account', {'id': app.user.id}) }}">Delete Account</a>
+            <a class="btn btn-primary my-2" href="{{ path('app_edit_user') }}">Edit Account</a>
+        </div>
+    </div>
+
+    <div class="mb-5">
+        <h3 class="text-muted">Blacklisted tags</h3>
+        <p>
+            SFW by default, yes we know it can be awkward to add certain "phrases" <br>
+            Delete all of them if you want the full unfiltered experience
+        </p>
+        <input type="text" id="bannedTags" class="form-control" value="ive set myself up">
+    </div>
+{% endblock %}

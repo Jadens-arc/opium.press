@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}| Embargo{% endblock %}
+
+{% block content %}
+    <h1>In Embargo</h1>
+    {% if not posts %}
+        <h3 class="text-muted text-center">Nothing yet :( Just be thoughtful about what you write</h3
+    {% endif %}
+
+   {% include 'essays.html.twig' %}
+{% endblock %}
