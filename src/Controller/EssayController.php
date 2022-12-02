@@ -85,12 +85,17 @@ class EssayController extends AbstractController
     public function delete(Request $request, ManagerRegistry $doctrine, UserInterface $user, $id): Response
     {
         $em = $doctrine->getManager();
+        /**
+         * @var Post $post
+         */
         $post = $doctrine->getRepository(Post::class)->find($id);
-        if ($post && (($user->getId() == $post->getCreatorId() && $post.get) || in_array("ROLE_ADMIN", $user->getRoles()))) {
+        if (!$post)
+            return $this->redirectToRoute('app_homepage', ['message' => "Post not Found", 'type' => 'danger']);
+        if (($user->getId() == $post->getCreatorId() && $post->isInEmbargo()) || in_array("ROLE_ADMIN", $user->getRoles())) {
             $em->remove($post);
             $em->flush();
-            return $this->redirect(explode("essay", $request->getUri())[0]);
-        }  
+            return $this->redirectToRoute('app_embargo');
+        }
         return $this->redirectToRoute('app_homepage');
     }
 

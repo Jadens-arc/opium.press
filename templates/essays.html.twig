@@ -8,7 +8,7 @@
     <div class="card" id="{{ post.id }}" style="margin: 20px 0; overflow: visible">
         <h6 class="card-header" style="cursor: pointer" onclick="window.location='{{ path('app_view_essay', {'id': post.id}) }}'">
             <div class="col-sm d-flex flex-row" style="flex-grow: 1">
-                {% if app.user and is_granted('ROLE_ADMIN') %}
+                {% if (app.user and is_granted('ROLE_ADMIN')) or ("-3 days"|date("Y-m-d H:i:s") < post.creationDate.format('Y-m-d H:i:s'))  %}
                     <a href="{{ path('app_delete_essay', {'id': post.id}) }}">
                         <img alt="Trash can" src="{{ asset('regular/trash-can.svg') }}" style="margin-right:20px; width: 1rem;" alt="">
                     </a>

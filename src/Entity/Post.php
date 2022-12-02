@@ -111,9 +111,8 @@ class Post
     {
         $currentDate = new \DateTime();
         $currentDate->modify("-3 day");
-        $currentDate = $currentDate->format('Y-m-d H:i:s');
 
-        return ($this.creationDate < $currentDate);
+        return ($this->creationDate > $currentDate);
     }
 
     public function setCreationDate(): self
