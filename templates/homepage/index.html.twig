@@ -3,6 +3,11 @@
     {% if not app.user %}
         {% include 'homepage/welcome.html.twig' %}
     {% endif %}
+    {% if app.request.get('message') %}
+        <div class="alert alert-{{ app.request.get('type') }}" role="alert">
+            {{ app.request.get('message') }}
+        </div>
+    {% endif %}
     <h1>{{ title }}</h1>
     {% include 'essays.html.twig' %}
 {% endblock %}
