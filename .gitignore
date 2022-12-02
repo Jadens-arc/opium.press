@@ -13,4 +13,4 @@
 ._.DS_Store
 .idea
 node_modules
-public/shares/*
+public/shares/*.png
