@@ -2,6 +2,10 @@
 {% block title %}| New Essay{% endblock %}
 {% block content %}
     <h1>New Essay</h1>
+    <div class="alert alert-secondary">
+        <span>All essays go through a 3-day embargo. After they leave the embargo they cannot be deleted. <a
+                    href="{{ path('app_about') }}">Learn more here</a></span>
+    </div>
     {{ form_start(form) }}
         <div class="my-custom-class-for-errors">
             {{ form_errors(form) }}
