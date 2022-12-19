@@ -8,14 +8,20 @@
     <div class="card" id="{{ post.id }}" style="margin: 20px 0; overflow: visible">
         <h6 class="card-header" style="cursor: pointer" onclick="window.location='{{ path('app_view_essay', {'id': post.id}) }}'">
             <div class="col-sm d-flex flex-row" style="flex-grow: 1">
-                {% if (app.user and is_granted('ROLE_ADMIN')) or ("-3 days"|date("Y-m-d H:i:s") < post.creationDate.format('Y-m-d H:i:s'))  %}
+                {% if (app.user and is_granted('ROLE_ADMIN')) or not post.creationDate or ("-3 days"|date("Y-m-d H:i:s") < post.creationDate.format('Y-m-d H:i:s'))  %}
                     <a href="{{ path('app_delete_essay', {'id': post.id}) }}">
-                        <img alt="Trash can" src="{{ asset('regular/trash-can.svg') }}" style="margin-right:20px; width: 1rem;" alt="">
+                        <img alt="Trash can" src="{{ asset('regular/trash-can.svg') }}" style="margin-right:20px; width: 1rem;">
                     </a>
                 {% endif %}
-                <a href="{{ path('app_share_essay', {'id': post.id}) }}">
-                  <img alt="Instagram Logo" src="{{ asset('brands/instagram.svg') }}" style="margin-right:20px; width: 1rem;" alt="">
-                </a>
+                {% if post.creationDate %}
+                    <a href="{{ path('app_share_essay', {'id': post.id}) }}">
+                      <img alt="Instagram Logo" src="{{ asset('brands/instagram.svg') }}" style="margin-right:20px; width: 1rem;">
+                    </a>
+                {% else %}
+                    <a href="{{ path('app_essay_post_draft', {'id': post.id}) }}">
+                        <img alt="share" src="{{ asset('regular/share-from-square.svg') }}" style="margin-right:20px; width: 1rem;">
+                    </a>
+                {% endif %}
                 <a href="{{ path('app_writer', {"username": post.creatorUsername}) }}" 
                     style="text-decoration:none;" class="d-block text-capitalize text-dark">{{ post.creatorName }}</a>
                 <a href="{{ path('app_writer', {"username": post.creatorUsername}) }}"
@@ -37,9 +43,11 @@
             </div>
         </h6>
         <div class="m-2">
-            <span class="d-block text-muted">{{ post.creationDate.format('Y-m-d H:i:s') | format_datetime(locale='en', timezone='America/Los_Angeles') }}</span>
+            {% if post.creationDate %}
+                <span class="d-block text-muted">{{ post.creationDate.format('Y-m-d H:i:s') | format_datetime(locale='en', timezone='America/Los_Angeles') }}</span>
+            {% endif %}
             {% for tag in post.tags %}
-                <a href="{{ path('app_homepage', {'q': '#' ~ tag}) }}"  style="text-decoration: none;" class="badge text-bg-primary mx-1">#{{ tag }}</></a>
+                <a href="{{ path('app_homepage', {'q': '#' ~ tag}) }}"  style="text-decoration: none;" class="badge text-bg-primary mx-1">#{{ tag }}</a>
             {% endfor %}
         </div>
         <div class="card-body">
