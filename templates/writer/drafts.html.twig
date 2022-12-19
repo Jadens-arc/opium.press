@@ -3,5 +3,8 @@
 {% block title %}| Drafts{% endblock %}
 {% block content %}
     <h1>{{ title }}</h1>
+    {% if not posts %}
+        <h3 class="text-muted text-center">Nothing yet :( go write something</h3
+    {% endif %}
     {% include 'essays.html.twig' %}
 {% endblock %}
