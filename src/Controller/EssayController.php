@@ -97,9 +97,15 @@ class EssayController extends AbstractController
         $post = $doctrine->getRepository(Post::class)->find($id);
         if (!$post)
             return $this->redirectToRoute('app_homepage', ['message' => "Post not Found", 'type' => 'danger']);
-        if (($user->getId() == $post->getCreatorId() && ($post->isInEmbargo() || !$post->getCreationDate())) || in_array("ROLE_ADMIN", $user->getRoles())) {
+        if ($user->getId() != $post->getCreatorId()) {
+            return $this->redirectToRoute('app_homepage', ['message' => "Not your post", 'type' => 'danger']);
+        }
+        if ($post->isInEmbargo() || !$post->getCreationDate() || in_array("ROLE_ADMIN", $user->getRoles())) {
             $em->remove($post);
             $em->flush();
+            if (!$post->getCreationDate()) {
+                return $this->redirectToRoute('app_drafts');
+            }
             return $this->redirectToRoute('app_embargo');
         }
         return $this->redirectToRoute('app_homepage');
