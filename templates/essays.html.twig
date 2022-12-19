@@ -10,11 +10,11 @@
             <div class="col-sm d-flex flex-row" style="flex-grow: 1">
                 {% if (app.user and is_granted('ROLE_ADMIN')) or not post.creationDate or ("-3 days"|date("Y-m-d H:i:s") < post.creationDate.format('Y-m-d H:i:s'))  %}
                     <a href="{{ path('app_delete_essay', {'id': post.id}) }}">
-                        <img alt="Trash can" src="{{ asset('regular/trash-can.svg') }}" style="margin-right:20px; width: 1rem;" alt="">
+                        <img alt="Trash can" src="{{ asset('regular/trash-can.svg') }}" style="margin-right:20px; width: 1rem;">
                     </a>
                 {% endif %}
                 <a href="{{ path('app_share_essay', {'id': post.id}) }}">
-                  <img alt="Instagram Logo" src="{{ asset('brands/instagram.svg') }}" style="margin-right:20px; width: 1rem;" alt="">
+                  <img alt="Instagram Logo" src="{{ asset('brands/instagram.svg') }}" style="margin-right:20px; width: 1rem;">
                 </a>
                 <a href="{{ path('app_writer', {"username": post.creatorUsername}) }}" 
                     style="text-decoration:none;" class="d-block text-capitalize text-dark">{{ post.creatorName }}</a>
