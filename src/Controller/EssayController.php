@@ -49,10 +49,12 @@ class EssayController extends AbstractController
             $formData = $form->getData();
             $post->setTitle(filter_var($formData['title']));
             $post->setContent($formData['content']);
-            if (in_array("ROLE_ADMIN", $user->getRoles())) {
-                $post->setCreationDateAdmin();
-            } else {
-                $post->setCreationDate();
+            if (!$request->query->get("isDraft")) {
+                if (in_array("ROLE_ADMIN", $user->getRoles())) {
+                    $post->setCreationDateAdmin();
+                } else {
+                        $post->setCreationDate();
+                }
             }
             $post->setCreatorName($userData->getDisplayName());
             $post->setCreatorUsername($userData->getUsername());
@@ -76,7 +78,11 @@ class EssayController extends AbstractController
             $em->persist($post);
             $em->flush();
 
-            return $this->redirectToRoute('app_embargo');
+            if ($request->query->get("isDraft")) {
+                return $this->redirectToRoute('app_drafts');
+            } else {
+                return $this->redirectToRoute('app_embargo');
+            }
         }
         return $this->renderForm('essay/new.html.twig', ["form"=>$form]);
     }
@@ -91,7 +97,7 @@ class EssayController extends AbstractController
         $post = $doctrine->getRepository(Post::class)->find($id);
         if (!$post)
             return $this->redirectToRoute('app_homepage', ['message' => "Post not Found", 'type' => 'danger']);
-        if (($user->getId() == $post->getCreatorId() && $post->isInEmbargo()) || in_array("ROLE_ADMIN", $user->getRoles())) {
+        if (($user->getId() == $post->getCreatorId() && ($post->isInEmbargo() || !$post->getCreationDate())) || in_array("ROLE_ADMIN", $user->getRoles())) {
             $em->remove($post);
             $em->flush();
             return $this->redirectToRoute('app_embargo');

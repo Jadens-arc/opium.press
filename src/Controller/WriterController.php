@@ -2,10 +2,12 @@
 
 namespace App\Controller;
 
+use App\Entity\Post;
 use App\Entity\User;
 use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -37,4 +39,9 @@ class WriterController extends AbstractController
         ]);
     }
 
+    #[Route('/drafts', name: "app_drafts")]
+    public function drafts(Request $request, ManagerRegistry $doctrine, UserInterface $user): Response {
+        $posts = $doctrine->getRepository(Post::class)->findBy(["creatorId" => $user, "creationDate" => null]);
+        return $this->render('writer/drafts.html.twig', ["posts" => $posts, "title" => "Drafts"]);
+    }
 }
