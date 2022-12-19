@@ -105,6 +105,25 @@ class EssayController extends AbstractController
         return $this->redirectToRoute('app_homepage');
     }
 
+    #[Route('/essay/post_draft/{id}', name: 'app_essay_post_draft')]
+    public function postDraft(Request $request, ManagerRegistry $doctrine, UserInterface $user, $id): Response {
+        $em = $doctrine->getManager();
+        $post = $doctrine->getRepository(Post::class)->find($id);
+        if (!$post)
+            return $this->redirectToRoute('app_homepage', ['message' => "Post not Found", 'type' => 'danger']);
+        if ($user->getId() != $post->getCreatorId())
+            return $this->redirectToRoute('app_homepage', ['message' => "You don't own this", 'type' => 'danger']);
+        if (in_array("ROLE_ADMIN", $user->getRoles())) {
+            $post->setCreationDateAdmin();
+            return $this->redirectToRoute("app_homepage");
+        } else {
+            $post->setCreationDate();
+            $em->merge($post);
+            $em->flush();
+            return $this->redirectToRoute("app_embargo");
+        }
+    }
+
     #[Route('/essay/{id}', name: 'app_view_essay')]
     public function index(Request $request, ManagerRegistry $doctrine, $id): Response
     {

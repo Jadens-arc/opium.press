@@ -13,9 +13,15 @@
                         <img alt="Trash can" src="{{ asset('regular/trash-can.svg') }}" style="margin-right:20px; width: 1rem;">
                     </a>
                 {% endif %}
-                <a href="{{ path('app_share_essay', {'id': post.id}) }}">
-                  <img alt="Instagram Logo" src="{{ asset('brands/instagram.svg') }}" style="margin-right:20px; width: 1rem;">
-                </a>
+                {% if post.creationDate %}
+                    <a href="{{ path('app_share_essay', {'id': post.id}) }}">
+                      <img alt="Instagram Logo" src="{{ asset('brands/instagram.svg') }}" style="margin-right:20px; width: 1rem;">
+                    </a>
+                {% else %}
+                    <a href="{{ path('app_essay_post_draft', {'id': post.id}) }}">
+                        <img alt="share" src="{{ asset('regular/share-from-square.svg') }}" style="margin-right:20px; width: 1rem;">
+                    </a>
+                {% endif %}
                 <a href="{{ path('app_writer', {"username": post.creatorUsername}) }}" 
                     style="text-decoration:none;" class="d-block text-capitalize text-dark">{{ post.creatorName }}</a>
                 <a href="{{ path('app_writer', {"username": post.creatorUsername}) }}"
