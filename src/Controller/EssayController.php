@@ -60,6 +60,7 @@ class EssayController extends AbstractController
             $post->setCreatorUsername($userData->getUsername());
             $post->setCreatorId($user->getId());
             if (strlen(trim($formData['tagInput'])) > 0) {
+                $tags = $formData['tagInput'];
                 if (!in_array("ROLE_ADMIN", $user->getRoles())) {
                     $tags = str_replace("haute maison", "", str_replace("haute maison,", "", $formData['tagInput']));
                 }
