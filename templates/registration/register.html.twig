@@ -18,7 +18,8 @@
 
         <label class="label">{{ form_label(registrationForm.display_name) }}</label>
         {{ form_widget(registrationForm.display_name, {'attr': {'class': 'form-control mb-3'}}) }}
-
+        
+        <small class="text-muted small">This password should be unique to opium</small>
         <label class="label">Password</label>
         {{ form_widget(registrationForm.plainPassword,  {'attr': {'class': 'form-control mb-3'}}) }}
 
