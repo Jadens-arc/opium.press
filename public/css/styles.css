@@ -1,0 +1,48 @@
+@font-face { font-family: SerifPro; src: url('/Source_Serif_Pro/SourceSerifPro-Regular.ttf'); }
+
+:root {
+    --bs-body-bg: rgb(26, 27, 38);
+    --bs-body-color: rgb(169, 177, 214);
+    --bs-heading-color: rgb(169, 177, 214);
+    --bs-body-font-family: SerifPro;
+}
+
+.card {
+    --bs-card-bg: #181924;
+    --bs-card-border-color: #13131c;
+    --bs-card-border-width: 1px;
+    --bs-card-color: #d4daff;
+}
+
+.form-control {
+    background-color: var(--bs-body-bg);
+    color: var(--bs-body-color);
+}
+
+.form-control:focus {
+    color: var(--bs-body-color);
+    background-color: var(--bs-body-bg);
+    border-color: #86b7fe;
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+.navbar {
+    --bs-navbar-color: white;
+    --bs-navbar-hover-color: rgb(169, 177, 214);
+}
+
+.text-muted {
+    --bs-text-opacity: 1;
+    color: rgba(var(--bs-body-color), 0.75) !important;
+}
+
+.icon {
+    filter: invert();
+}
+
+.alert-secondary {
+    --bs-alert-color: #41464b;
+    --bs-alert-bg: var(--bs-body-color);
+    --bs-alert-border-color: #d3d6d8;
+}
