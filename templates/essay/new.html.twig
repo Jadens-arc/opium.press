@@ -79,27 +79,30 @@
         let tags = [];
 
         function appendTag(tagName) {
-            tagName = tagName.replace('#', '');
-            tags.push(tagName);
+            if (!tagName) return;
+            tagName.split(',').forEach(tag => {
+                tag = tag.replace('#', '');
+                tags.push(tag);
 
-            let newTag = document.createElement('li');
-            newTag.innerText = "#" + tagName
-            newTag.classList.add('list-group-item')
+                let newTag = document.createElement('li');
+                newTag.innerText = "#" + tag
+                newTag.classList.add('list-group-item')
 
-            newTag.addEventListener("mouseover", (e) => {
-                newTag.classList.add("list-group-item-danger")
-            })
+                newTag.addEventListener("mouseover", (e) => {
+                    newTag.classList.add("list-group-item-danger")
+                })
 
-            newTag.addEventListener("mouseout", (e) => {
-                newTag.classList.remove("list-group-item-danger")
-            })
+                newTag.addEventListener("mouseout", (e) => {
+                    newTag.classList.remove("list-group-item-danger")
+                })
 
-            newTag.addEventListener("click", (e) => {
-                newTag.remove()
-                tags.splice(tags.length-1, 1)
-            })
+                newTag.addEventListener("click", (e) => {
+                    newTag.remove()
+                    tags.splice(tags.length-1, 1)
+                })
 
-            tagList.appendChild(newTag)
+                tagList.appendChild(newTag)
+            });
         }
 
         post_tagInput.addEventListener('keypress', (e) => {
@@ -116,26 +119,29 @@
         let sources = [];
 
         function appendSource(sourceName) {
-            sources.push(sourceName);
+            if (!sourceName) return;
+            sourceName.split(',').forEach(source => {
+                sources.push(source);
 
-            let newSource = document.createElement('li');
-            newSource.innerText = sourceName
-            newSource.classList.add('list-group-item')
+                let newSource = document.createElement('li');
+                newSource.innerText = source
+                newSource.classList.add('list-group-item')
 
-            newSource.addEventListener("mouseover", (e) => {
-                newSource.classList.add("list-group-item-danger")
+                newSource.addEventListener("mouseover", (e) => {
+                    newSource.classList.add("list-group-item-danger")
+                })
+
+                newSource.addEventListener("mouseout", (e) => {
+                    newSource.classList.remove("list-group-item-danger")
+                })
+
+                newSource.addEventListener("click", (e) => {
+                    newSource.remove()
+                    sources.splice(sources.length - 1, 1)
+                })
+
+                sourceList.appendChild(newSource)
             })
-
-            newSource.addEventListener("mouseout", (e) => {
-                newSource.classList.remove("list-group-item-danger")
-            })
-
-            newSource.addEventListener("click", (e) => {
-                newSource.remove()
-                sources.splice(sources.length-1, 1)
-            })
-
-            sourceList.appendChild(newSource)
         }
 
         post_sourceInput.addEventListener('keypress', (e) => {
@@ -146,6 +152,11 @@
             }
         })
 
+
+        appendTag(post_tagInput.value)
+        post_tagInput.value = ""
+        appendSource(post_sourceInput.value)
+        post_sourceInput.value = ""
 
         document.addEventListener("submit", (e) => {
             post_tagInput.value = ""

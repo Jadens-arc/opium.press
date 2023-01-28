@@ -36,19 +36,30 @@ class EssayController extends AbstractController
             ['post' => $filename, 'url' => $this->generateUrl("app_view_essay", ["id" => $id], UrlGenerator::ABSOLUTE_URL) ]);
     }
 
-    #[Route('/essay/new', name: 'app_new_essay')]
-    public function newEssay(Request $request, ManagerRegistry $doctrine, UserInterface $user): Response
+    #[Route('/essay/edit/{id}', name: 'app_new_essay')]
+    public function newEssay(Request $request, ManagerRegistry $doctrine, UserInterface $user, $id): Response
     {
         $post = new Post();
+        $post->setCreatorId($user->getId());
+
         $form = $this->createForm(PostType::class);
+        if ($id != "new" && is_numeric($id)) {
+            $post = $doctrine->getRepository(Post::class)->find($id);
+            $form = $this->createForm(PostType::class, $post);
+            if ($post->getTags())
+                $form['tagInput']->setData(implode(",", $post->getTags()));
+            if ($post->getSources())
+                $form['sourceInput']->setData(implode(",", $post->getSources()));
+        } else {
+            $post->tagInput = "";
+            $post->sourceInput = "";
+        }
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $doctrine->getManager();
             $userData = $em->find(User::class, $user->getId());
             $formData = $form->getData();
-            $post->setTitle(filter_var($formData['title']));
-            $post->setContent($formData['content']);
             if (!$request->query->get("isDraft")) {
                 if (in_array("ROLE_ADMIN", $user->getRoles())) {
                     $post->setCreationDateAdmin();
@@ -59,10 +70,11 @@ class EssayController extends AbstractController
             $post->setCreatorName($userData->getDisplayName());
             $post->setCreatorUsername($userData->getUsername());
             $post->setCreatorId($user->getId());
-            if (strlen(trim($formData['tagInput'])) > 0) {
-                $tags = $formData['tagInput'];
+            $tagInput = $form['tagInput']->getData();
+            if (strlen(trim($tagInput)) > 0) {
+                $tags = $tagInput;
                 if (!in_array("ROLE_ADMIN", $user->getRoles())) {
-                    $tags = str_replace("haute maison", "", str_replace("haute maison,", "", $formData['tagInput']));
+                    $tags = str_replace("haute maison", "", str_replace("haute maison,", "", $tagInput));
                 }
                 $post->setTags(explode(",", $tags));
             } else {
@@ -73,15 +85,18 @@ class EssayController extends AbstractController
                 array_push($newTags, "haute maison");
                 $post->setTags($newTags);
             }
-            if (strlen(trim($formData['sourceInput'])) > 0) {
-                $post->setSources(explode(",", $formData['sourceInput']));
+            $sourceInput = $form['sourceInput']->getData();
+            if (strlen(trim($sourceInput)) > 0) {
+                $post->setSources(explode(",", $sourceInput));
             }
-            $em->persist($post);
-            $em->flush();
 
             if ($request->query->get("isDraft")) {
+                $em->merge($post);
+                $em->flush();
                 return $this->redirectToRoute('app_drafts');
             } else {
+                $em->persist($post);
+                $em->flush();
                 return $this->redirectToRoute('app_embargo');
             }
         }

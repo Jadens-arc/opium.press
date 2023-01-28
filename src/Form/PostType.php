@@ -19,12 +19,12 @@ class PostType extends AbstractType
     {
         $builder
             ->add('title', TextType::class)
-            ->add('creatorId', NumberType::class)
+            ->add('creatorId', NumberType::class, ['mapped' => false])
             ->add('content', TextareaType::class, ["label" => "Speak Your Mind..."])
             ->add('tags', HiddenType::class, )
             ->add('sources', HiddenType::class, )
-            ->add('tagInput', TextType::class, ["label" => "Add Tags", "required" => false])
-            ->add('sourceInput', TextType::class, ["label" => "Add Sources", "required" => false])
+            ->add('tagInput', TextType::class, ["label" => "Add Tags", "required" => false, "mapped" => false])
+            ->add('sourceInput', TextType::class, ["label" => "Add Sources", "required" => false, "mapped" => false])
             ->add('submit', SubmitType::class, ["label" => "Post"])
 
         ;
