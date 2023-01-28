@@ -18,9 +18,12 @@
 
         <label class="label">{{ form_label(registrationForm.display_name) }}</label>
         {{ form_widget(registrationForm.display_name, {'attr': {'class': 'form-control mb-3'}}) }}
-
+        
+        
         <label class="label">Password</label>
         {{ form_widget(registrationForm.plainPassword,  {'attr': {'class': 'form-control mb-3'}}) }}
+        <small class="text-muted small">This password should be unique to opium</small>
+        <br>
 
         <div class="input">
             {{ form_label(registrationForm.agreeTerms, "Agree to Terms and Conditions and that you're 18 or older ", {'attr': {'class': 'form-check-label'}}) }}
