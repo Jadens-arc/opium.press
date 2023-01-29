@@ -4,7 +4,7 @@
     --bs-body-bg: rgb(31, 32, 47);
     --bs-body-color: rgb(169, 177, 214);
     --bs-heading-color: rgb(169, 177, 214);
-    --bs-body-font-family: Ubuntu;
+    --bs-body-font-family: Ubuntu, sans-serif;
 }
 
 .card {
