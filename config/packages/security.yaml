@@ -37,7 +37,7 @@ security:
                 enable_csrf: true
             remember_me:
                 secret: '%kernel.secret%' # required
-                lifetime: 604800 # 1 week in seconds
+                lifetime: 2419200 # 1 month (4 weeks) in seconds
                 always_remember_me: true
                 # by default, the feature is enabled by checking a
                 # checkbox in the login form (see below), uncomment the
