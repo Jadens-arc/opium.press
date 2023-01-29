@@ -1,10 +1,10 @@
-@font-face { font-family: SerifPro; src: url('/Source_Serif_Pro/SourceSerifPro-Regular.ttf'); }
+@font-face { font-family: Ubuntu; src: url('/Ubuntu/Ubuntu-Regular.ttf'); }
 
 :root {
-    --bs-body-bg: rgb(26, 27, 38);
+    --bs-body-bg: rgb(31, 32, 47);
     --bs-body-color: rgb(169, 177, 214);
     --bs-heading-color: rgb(169, 177, 214);
-    --bs-body-font-family: SerifPro;
+    --bs-body-font-family: Ubuntu;
 }
 
 .card {
