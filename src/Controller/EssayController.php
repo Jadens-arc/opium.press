@@ -45,6 +45,7 @@ class EssayController extends AbstractController
         $form = $this->createForm(PostType::class);
         if ($id != "new" && is_numeric($id)) {
             $post = $doctrine->getRepository(Post::class)->find($id);
+            $post->setCreatorId($user->getId());
             $form = $this->createForm(PostType::class, $post);
             if ($post->getTags())
                 $form['tagInput']->setData(implode(",", $post->getTags()));
@@ -89,6 +90,9 @@ class EssayController extends AbstractController
             if (strlen(trim($sourceInput)) > 0) {
                 $post->setSources(explode(",", $sourceInput));
             }
+
+            $post->setTitle($formData['title']);
+            $post->setContent($formData['content']);
 
             if ($request->query->get("isDraft")) {
                 $em->merge($post);
