@@ -25,10 +25,10 @@
                         <img class="icon" alt="share" src="{{ asset('regular/pen-to-square.svg') }}" style="margin-right:20px; width: 1rem;">
                     </a>
                 {% endif %}
-                <a href="{{ path('app_writer', {"username": post.creatorUsername}) }}" 
-                    style="text-decoration:none;" class="d-block text-capitalize text-muted">{{ post.creatorName }}</a>
-                <a href="{{ path('app_writer', {"username": post.creatorUsername}) }}"
-                    class="d-block mx-2 fw-light text-muted">@{{ post.creatorUsername }}</a>
+                <a href="{{ path('app_writer', {"username": post.creator.username}) }}"
+                    style="text-decoration:none;" class="d-block text-capitalize text-muted">{{ post.creator.displayName }}</a>
+                <a href="{{ path('app_writer', {"username": post.creator.username}) }}"
+                    class="d-block mx-2 fw-light text-muted">@{{ post.creator.username }}</a>
             </div>
             <div class="col-sm d-flex flex-row justify-content-end">
                 {# {% if app.user %}

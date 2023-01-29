@@ -24,7 +24,7 @@ class EmbargoController extends AbstractController
         $id = $user->getId();
         $posts = $doctrine
             ->getManager()
-            ->createQuery("SELECT p FROM App\Entity\Post p WHERE p.creatorId = $id AND p.creationDate > '$currentDate' ORDER BY p.creationDate DESC")
+            ->createQuery("SELECT p FROM App\Entity\Post p WHERE p.creator = $id AND p.creationDate > '$currentDate' ORDER BY p.creationDate DESC")
             ->getResult();
         return $this->render('embargo/index.html.twig', ["posts"=>$posts]);
     }

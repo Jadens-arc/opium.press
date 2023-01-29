@@ -40,12 +40,12 @@ class EssayController extends AbstractController
     public function newEssay(Request $request, ManagerRegistry $doctrine, UserInterface $user, $id): Response
     {
         $post = new Post();
-        $post->setCreatorId($user->getId());
+        $post->setCreator($user);
 
         $form = $this->createForm(PostType::class);
         if ($id != "new" && is_numeric($id)) {
             $post = $doctrine->getRepository(Post::class)->find($id);
-            $post->setCreatorId($user->getId());
+            $post->setCreator($user);
             $form = $this->createForm(PostType::class, $post);
             if ($post->getTags())
                 $form['tagInput']->setData(implode(",", $post->getTags()));
@@ -68,9 +68,7 @@ class EssayController extends AbstractController
                         $post->setCreationDate();
                 }
             }
-            $post->setCreatorName($userData->getDisplayName());
-            $post->setCreatorUsername($userData->getUsername());
-            $post->setCreatorId($user->getId());
+            $post->setCreator($user);
             $tagInput = $form['tagInput']->getData();
             if (strlen(trim($tagInput)) > 0) {
                 $tags = $tagInput;

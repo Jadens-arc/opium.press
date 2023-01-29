@@ -19,12 +19,6 @@ class Post
     #[ORM\Column(type: 'array', nullable: true)]
     private $tags = [];
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $creatorName;
-
-    #[ORM\Column(type: 'integer', nullable: true)]
-    private $creatorId;
-
     #[ORM\Column(type: 'text')]
     private $content;
 
@@ -34,8 +28,9 @@ class Post
     #[ORM\Column(type: 'array', nullable: true)]
     private $sources = [];
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private $creatorUsername;
+    #[ORM\ManyToOne(inversedBy: 'posts')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $creator = null;
 
     public function getId(): ?int
     {
@@ -62,30 +57,6 @@ class Post
     public function setTags(?array $tags): self
     {
         $this->tags = $tags;
-
-        return $this;
-    }
-
-    public function getCreatorName(): ?string
-    {
-        return $this->creatorName;
-    }
-
-    public function setCreatorName(string $creatorName): self
-    {
-        $this->creatorName = $creatorName;
-
-        return $this;
-    }
-
-    public function getCreatorId(): ?int
-    {
-        return $this->creatorId;
-    }
-
-    public function setCreatorId(int $creatorId): self
-    {
-        $this->creatorId = $creatorId;
 
         return $this;
     }
@@ -142,14 +113,14 @@ class Post
         return $this;
     }
 
-    public function getCreatorUsername(): ?string
+    public function getCreator(): ?User
     {
-        return $this->creatorUsername;
+        return $this->creator;
     }
 
-    public function setCreatorUsername(string $creatorUsername): self
+    public function setCreator(?User $creator): self
     {
-        $this->creatorUsername = $creatorUsername;
+        $this->creator = $creator;
 
         return $this;
     }

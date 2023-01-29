@@ -29,7 +29,7 @@ class WriterController extends AbstractController
         $id = $user->getId();
         $posts = $doctrine
             ->getManager()
-            ->createQuery("SELECT p FROM App\Entity\Post p WHERE p.creationDate < '$currentDate' and p.creatorId = $id ORDER BY p.creationDate DESC")
+            ->createQuery("SELECT p FROM App\Entity\Post p WHERE p.creationDate < '$currentDate' and p.creator = $id ORDER BY p.creationDate DESC")
             ->getResult();
         return $this->render('writer/index.html.twig', [
             'posts' => $posts,
@@ -41,7 +41,7 @@ class WriterController extends AbstractController
 
     #[Route('/drafts', name: "app_drafts")]
     public function drafts(Request $request, ManagerRegistry $doctrine, UserInterface $user): Response {
-        $posts = $doctrine->getRepository(Post::class)->findBy(["creatorId" => $user, "creationDate" => null]);
+        $posts = $doctrine->getRepository(Post::class)->findBy(["creator" => $user, "creationDate" => null]);
         return $this->render('writer/drafts.html.twig', ["posts" => $posts, "title" => "Drafts"]);
     }
 }

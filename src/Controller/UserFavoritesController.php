@@ -39,7 +39,7 @@ class UserFavoritesController extends AbstractController
         $subscriptionsString = str_replace('"', "'", $subscriptionsString);
     
 
-        $query = "SELECT p FROM App\Entity\Post p WHERE p.creationDate < '$currentDate' AND p.creatorUsername IN $subscriptionsString";
+        $query = "SELECT p FROM App\Entity\Post p WHERE p.creationDate < '$currentDate' AND p.creator IN $subscriptionsString";
         $querySort = "ORDER BY p.creationDate DESC ";
         $query .= $querySort;
         $posts = $em
@@ -54,7 +54,8 @@ class UserFavoritesController extends AbstractController
     public function subscribe(Request $request, ManagerRegistry $doctrine, UserInterface $user, $username): Response
     {
         $subscriptions = $user->getSubscriptions();
-        array_push($subscriptions, $username);
+        $userId = $doctrine->getRepository(User::class)->findOneBy(['username' => $username])->getId();
+        array_push($subscriptions, $userId);
         $user->setSubscriptions($subscriptions);
         $em = $doctrine->getManager();
         $em->persist($user);
