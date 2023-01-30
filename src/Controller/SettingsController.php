@@ -34,25 +34,4 @@ class SettingsController extends AbstractController
     {
         return $this->render('settings/about.html.twig');
     }
-
-    #[Route('/delete-account/{id}', name: 'app_delete_account')]
-    public function deleteAccount(ManagerRegistry $doctrine, UserInterface $user, int $id): Response
-    {
-        if ($user->getId() != $id) {
-            return $this->redirectToRoute('app_settings');
-        }
-        $em = $doctrine->getManager();
-        $user_posts = $doctrine->getRepository(Post::class)->findBy(['creatorId' => $user->getId()]);
-        if ($user_post) {
-            foreach ($user_post as $post) {
-                $em->remove($post);
-                $em->flush();
-            }
-        }
-        $user = $doctrine->getRepository(User::class)->findOneBy(['id' => $user->getId()]);
-        $em->remove($user);
-        $em->flush();
-        return $this->redirectToRoute('app_homepage');
-    }
-
 }
