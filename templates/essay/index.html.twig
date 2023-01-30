@@ -5,8 +5,8 @@
 {% block content %}
     <h6 class="card-header" style="display: flex; justify-content: space-between">
         <div class="d-flex flex-row" style="flex-grow: 1">
-            <span class="d-block text-capitalize">{{ post.creatorName }}</span>
-            <a class="d-block mx-2 fw-light text-muted" href="/writer/{{ post.creatorUsername }}">@{{ post.creatorUsername }}</a>
+            <span class="d-block text-capitalize">{{ post.creator.displayName }}</span>
+            <a class="d-block mx-2 fw-light text-muted" href="/writer/{{ post.creator.username }}">@{{ post.creator.username }}</a>
         </div>
         <div class="d-flex flex-row justify-content-between">
             <a href="/essay/share/{{ post.id }}">
