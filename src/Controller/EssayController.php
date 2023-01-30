@@ -24,7 +24,7 @@ class EssayController extends AbstractController
         $pattern = "/[^_a-z0-9- ]/i";
         $title = preg_replace($pattern,'', $post->getTitle());
         $content = preg_replace($pattern,'', $post->getContent());
-        $filename = $post->getCreatorId() . "-" . $post->getId(). ".png";
+        $filename = $post->getCreator()->getId() . "-" . $post->getId(). ".png";
         $output = "hi";
         $code = null;
         $command = exec(
@@ -115,7 +115,7 @@ class EssayController extends AbstractController
         $post = $doctrine->getRepository(Post::class)->find($id);
         if (!$post)
             return $this->redirectToRoute('app_homepage', ['message' => "Post not Found", 'type' => 'danger']);
-        if ($user->getId() != $post->getCreatorId()) {
+        if ($user !== $post->getCreator()) {
             return $this->redirectToRoute('app_homepage', ['message' => "Not your post", 'type' => 'danger']);
         }
         if ($post->isInEmbargo() || !$post->getCreationDate() || in_array("ROLE_ADMIN", $user->getRoles())) {
@@ -135,7 +135,7 @@ class EssayController extends AbstractController
         $post = $doctrine->getRepository(Post::class)->find($id);
         if (!$post)
             return $this->redirectToRoute('app_homepage', ['message' => "Post not Found", 'type' => 'danger']);
-        if ($user->getId() != $post->getCreatorId())
+        if ($user !== $post->getCreator())
             return $this->redirectToRoute('app_homepage', ['message' => "You don't own this", 'type' => 'danger']);
         if (in_array("ROLE_ADMIN", $user->getRoles())) {
             $post->setCreationDateAdmin();
