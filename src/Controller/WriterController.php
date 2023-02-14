@@ -22,20 +22,22 @@ class WriterController extends AbstractController
         $currentDate = new DateTime();
         $currentDate->modify("-3 day");
         $currentDate = $currentDate->format('Y-m-d H:i:s');
-        $user = $doctrine->getRepository(User::class)->findOneBy(['username' => $username]);
-        if (!$user) {
+        $writer = $doctrine->getRepository(User::class)->findOneBy(['username' => $username]);
+        if (!$writer) {
             return $this->redirect('/');
         }
-        $id = $user->getId();
-        $posts = $doctrine
-            ->getManager()
-            ->createQuery("SELECT p FROM App\Entity\Post p WHERE p.creationDate < '$currentDate' and p.creator = $id ORDER BY p.creationDate DESC")
+        $posts = $doctrine->getRepository(Post::class)
+            ->createQueryBuilder('p')
+            ->where('p.creationDate < :currentDate')
+            ->setParameter('currentDate', $currentDate)
+            ->andWhere('p.creator = :writer')
+            ->setParameter('writer', $writer)
+            ->orderBy('p.creationDate', 'DESC')
+            ->getQuery()
             ->getResult();
         return $this->render('writer/index.html.twig', [
             'posts' => $posts,
-            'username' => $user->getUsername(),
-            'displayName' => $user->getDisplayName(),
-            'email' => $user->getEmail(),
+            'writer' => $writer
         ]);
     }
 
