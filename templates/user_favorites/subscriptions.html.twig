@@ -6,9 +6,9 @@
     <h1>{{ title }}</h1>
     <div style="scrollbar-width: none;" class="d-flex flex-row overflow-scroll pb-3">
         {% for subscription in subscriptions %}
-            <a class href="{{ path("app_writer", {"username": subscription}) }}">
+            <a class href="{{ path("app_writer", {"username": subscription.username}) }}">
                 <span class="btn btn-primary mx-1">
-                    @{{ subscription }}
+                    @{{ subscription.username }}
                 </span>
             </a>
         {% endfor %}

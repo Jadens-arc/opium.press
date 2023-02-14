@@ -31,9 +31,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string')]
     private $password;
 
-    #[ORM\Column(type: 'array', nullable: true)]
-    private $subscriptions = [];
-
     #[ORM\Column(type: 'string', length: 255)]
     private $displayName;
 
@@ -51,9 +48,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'creator', targetEntity: Post::class, orphanRemoval: true)]
     private Collection $posts;
 
+    #[ORM\ManyToMany(targetEntity: self::class, inversedBy: 'subscribers')]
+    private Collection $subscriptions;
+
+    #[ORM\ManyToMany(targetEntity: self::class, mappedBy: 'subscriptions')]
+    private Collection $subscribers;
+
     public function __construct()
     {
         $this->posts = new ArrayCollection();
+        $this->subscriptions = new ArrayCollection();
+        $this->subscribers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -126,18 +131,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // $this->plainPassword = null;
     }
 
-    public function getSubscriptions(): ?array
-    {
-        return $this->subscriptions;
-    }
-
-    public function setSubscriptions(?array $subscriptions): self
-    {
-        $this->subscriptions = $subscriptions;
-
-        return $this;
-    }
-
     public function getDisplayName(): ?string
     {
         return $this->displayName;
@@ -199,6 +192,57 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             if ($post->getCreator() === $this) {
                 $post->setCreator(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, self>
+     */
+    public function getSubscriptions(): Collection
+    {
+        return $this->subscriptions;
+    }
+
+    public function addSubscription(self $subscription): self
+    {
+        if (!$this->subscriptions->contains($subscription)) {
+            $this->subscriptions->add($subscription);
+        }
+
+        return $this;
+    }
+
+    public function removeSubscription(self $subscription): self
+    {
+        $this->subscriptions->removeElement($subscription);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, self>
+     */
+    public function getSubscribers(): Collection
+    {
+        return $this->subscribers;
+    }
+
+    public function addSubscriber(self $subscriber): self
+    {
+        if (!$this->subscribers->contains($subscriber)) {
+            $this->subscribers->add($subscriber);
+            $subscriber->addSubscription($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSubscriber(self $subscriber): self
+    {
+        if ($this->subscribers->removeElement($subscriber)) {
+            $subscriber->removeSubscription($this);
         }
 
         return $this;

@@ -1,26 +1,26 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}| {{ username }}{% endblock %}
+{% block title %}| {{ writer.username }}{% endblock %}
 {% block content %}
     <div class="row">
         <div class="col-sm">
-            <h1 class="h1">{{ displayName }}</h1>
-            <h4 class="h4 text-muted">@{{ username }}</h4>
-            {% if app.user and app.user.username == username %}
-                <h4 class="h4 text-muted">{{ email }}</h4>
+            <h1 class="h1">{{ writer.displayName }}</h1>
+            <h4 class="h4 text-muted">@{{ writer.username }}</h4>
+            {% if app.user and app.user.username == writer.username %}
+                <h4 class="h4 text-muted">{{ writer.email }}</h4>
             {% endif %}
         </div>
         <div class="col-sm d-flex justify-content-end align-items-center ">
-            {% if app.user and app.user.username == username %}
+            {% if app.user and app.user.username == writer.username %}
                 {# <a class="btn btn-primary m-2" href="{{ path('app_saved') }}" style="height: fit-ontent">Saved</a> #}
                 <a class="btn btn-primary m-2" href="{{ path('app_settings') }}" style="height: fit-content">Settings</a>
                 <a class="btn btn-danger m-2" href="{{ path('app_logout') }}" style="height: fit-content">Logout</a>
             {% else %}
                 {% if app.user %}
-                    {% if username in app.user.subscriptions %}
-                        <a class="btn btn-primary m-2" href="{{ path('app_unsubscribe', {'username': username}) }}" style="height: fit-content">Unsubscribe</a>
+                    {% if writer in app.user.subscriptions %}
+                        <a class="btn btn-primary m-2" href="{{ path('app_unsubscribe', {'username': writer.username}) }}" style="height: fit-content">Unsubscribe</a>
                     {% else %}
-                        <a class="btn btn-primary m-2" href="{{ path('app_subscribe', {'username': username}) }}" style="height: fit-content">Subscribe</a>
+                        <a class="btn btn-primary m-2" href="{{ path('app_subscribe', {'username': writer.username}) }}" style="height: fit-content">Subscribe</a>
                     {% endif %}
                 {% endif %}
             {% endif %}
@@ -29,19 +29,19 @@
     </div>
     <hr>
     {% if not posts %}
-        {% if app.user and app.user.username == username %}
+        {% if app.user and app.user.username == writer.username %}
             <h3 class="text-muted text-center">No Essays :( Why don't you write something</h3>
         {% else %}
             <h3 class="text-muted text-center">Who ever runs this account is antisocial</h3>
         {% endif %}
     {% else %}
-        {% if app.user and app.user.username == username %}
+        {% if app.user and app.user.username == writer.username %}
             <h2 class="h2 text-muted">Your Essays</h2>
         {% else %}
-            {% if displayName|last == 's' %}
-                <h2 class="h2 text-muted">{{ displayName }}' Essays</h2>
+            {% if writer.displayName|last == 's' %}
+                <h2 class="h2 text-muted">{{ writer.displayName }}' Essays</h2>
             {% else %}
-                <h2 class="h2 text-muted">{{ displayName }}'s Essays</h2>
+                <h2 class="h2 text-muted">{{ writer.displayName }}'s Essays</h2>
             {% endif %}
         {% endif %}
     {% endif %}
