@@ -77,7 +77,7 @@
                                 </li>
                             {% endif %}
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ path('app_writer', {'username': app.user.username}) }}">My Profile</a>
+                                <a class="nav-link" href="{{ path('app_writer', {'username': app.user.username}) }}">{{ app.user.displayName }}</a>
                             </li>
                         {% endif %}
                         {% if is_granted('ROLE_ADMIN') %}
