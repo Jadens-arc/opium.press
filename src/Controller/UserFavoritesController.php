@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Container1vwxooY\getRedirectControllerService;
 use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,44 +21,34 @@ class UserFavoritesController extends AbstractController
     {
         $em = $doctrine->getManager();
 
-        $id = $user->getId();
         $currentDate = new DateTime();
         $currentDate->modify("-3 day");
         $currentDate = $currentDate->format('Y-m-d H:i:s');
-        
-        $subscriptions = $em
-            ->createQuery("SELECT u.subscriptions FROM App\Entity\User u WHERE u.id=$id")
+
+        $repo = $em->getRepository(Post::class);
+        $posts = $repo->createQueryBuilder('p')
+            ->where('p.creationDate < :currentDate')
+            ->setParameter('currentDate', $currentDate)
+            ->andWhere('p.creator in (:subscriptions)')
+            ->setParameter('subscriptions', $user->getSubscriptions())
+            ->orderBy('p.creationDate', 'DESC')
+            ->getQuery()
             ->getResult();
 
-        if (count($subscriptions[0]["subscriptions"]) == 0) {
-            return $this->render('homepage/index.html.twig', ["title" => "Subscriptions", "posts"=>[]]);
-        }
-
-        $subscriptionsString = json_encode($subscriptions[0]["subscriptions"]);
-        $subscriptionsString = str_replace("[", "( ", $subscriptionsString);
-        $subscriptionsString = str_replace("]", " )", $subscriptionsString);
-        $subscriptionsString = str_replace('"', "'", $subscriptionsString);
-    
-
-        $query = "SELECT p FROM App\Entity\Post p WHERE p.creationDate < '$currentDate' AND p.creator IN $subscriptionsString";
-        $querySort = "ORDER BY p.creationDate DESC ";
-        $query .= $querySort;
-        $posts = $em
-            ->createQuery($query)
-            ->getResult();
-
-        return $this->render('user_favorites/subscriptions.html.twig', ["title" => "Subscriptions", "posts"=>$posts, "subscriptions" => $subscriptions[0]["subscriptions"]]);
+        return $this->render('user_favorites/subscriptions.html.twig', [
+            "title" => "Subscriptions",
+            "posts"=>$posts,
+            "subscriptions" => $user->getSubscriptions()
+        ]);
     }
 
 
     #[Route('/subscribe/{username}', name: 'app_subscribe')]
     public function subscribe(Request $request, ManagerRegistry $doctrine, UserInterface $user, $username): Response
     {
-        $subscriptions = $user->getSubscriptions();
-        $userId = $doctrine->getRepository(User::class)->findOneBy(['username' => $username])->getId();
-        array_push($subscriptions, $userId);
-        $user->setSubscriptions($subscriptions);
         $em = $doctrine->getManager();
+        $writer = $doctrine->getRepository(User::class)->findOneBy(['username' => $username]);
+        $user->addSubscription($writer);
         $em->persist($user);
         $em->flush();
         return $this->redirectToRoute('app_writer', ["username" => $username]);
@@ -66,11 +57,9 @@ class UserFavoritesController extends AbstractController
     #[Route('/unsubscribe/{username}', name: 'app_unsubscribe')]
     public function unsubscribe(Request $request, ManagerRegistry $doctrine, UserInterface $user, $username): Response
     {
-        $subscriptions = $user->getSubscriptions();
-        $index = array_search($username, $subscriptions);
-        unset($subscriptions[$index]);
-        $user->setSubscriptions($subscriptions);
         $em = $doctrine->getManager();
+        $writer = $em->getRepository(User::class)->findOneBy(['username' => $username]);
+        $user->removeSubscription($writer);
         $em->persist($user);
         $em->flush();
         return $this->redirectToRoute('app_writer', ["username" => $username]);
