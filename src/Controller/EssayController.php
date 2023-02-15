@@ -156,10 +156,15 @@ class EssayController extends AbstractController
         $currentDate->modify("-3 day");
         $currentDate = $currentDate->format('Y-m-d H:i:s');
 
-        $post = $doctrine
-            ->getManager()
-            ->createQuery("SELECT p FROM App\Entity\Post p WHERE p.id = $id AND p.creationDate < '$currentDate'")
-            ->getResult();
+        $post = $doctrine->getRepository(Post::class)
+            ->createQueryBuilder('p')
+            ->where('p.id = :id')
+            ->setParameter("id", $id)
+            ->andWhere('p.creationDate < :currentDate')
+            ->setParameter("currentDate", $currentDate)
+            ->getQuery()
+            ->getResult()
+        ;
 
         if (!$post) {
             return $this->redirect('/');

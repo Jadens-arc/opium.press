@@ -20,27 +20,32 @@ class HomepageController extends AbstractController
         $currentDate = $currentDate->format('Y-m-d H:i:s');
 
         $searchQuery = $request->query->get('q');
-        $query = "SELECT p FROM App\Entity\Post p WHERE p.creationDate < '$currentDate'";
-        $querySort = "ORDER BY p.creationDate DESC";
+
+
+        $qb = $doctrine->getRepository(Post::class)
+            ->createQueryBuilder('p');
 
         if ($searchQuery) { // if user is searching
             $rawSearch = substr($searchQuery, 1); // remove @ and #
             if (strpos($searchQuery, "#") !== false) { // searching for hashtags
-                $query .= "AND p.tags like '%$rawSearch%' $querySort";
-            }elseif (strpos($searchQuery, "@") !== false) { // searching for usernames
-                $query .= " AND (p.content like '% $searchQuery %' OR p.creatorUsername = '$rawSearch') $querySort";
-            }else { // just searching by content and title
-                $query .= " AND (p.content like '% $searchQuery %' OR p.title like '% $searchQuery %') $querySort";
+                $qb->where("p.tags like :search")
+                    ->setParameter('search', $rawSearch);
+            } elseif (strpos($searchQuery, "@") !== false) { // searching for usernames
+                $qb->where("p.creator.username like :username")
+                    ->setParameter('username', $rawSearch);
+            } else { // just searching by content and title
+                $qb->where("p.content like :search")
+                    ->orWhere("p.title like :search")
+                    ->setParameter('search', "%".$searchQuery."%");
             }
-        } else { // if user is not searching
-            $query .= $querySort;
         }
 
-        $posts = $doctrine
-            ->getManager()
-            ->createQuery($query)
-            ->getResult();
+        $qb->andWhere('p.creationDate < :currentDate')
+            ->setParameter('currentDate', $currentDate)
+            ->orderBy('p.creationDate', 'DESC')
+        ;
 
+        $posts = $qb->getQuery()->getResult();
         return $this->render('homepage/index.html.twig', ["title" => "Latest...",  "posts"=>$posts]);
     }
 
