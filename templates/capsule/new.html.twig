@@ -1,9 +1,9 @@
 {% extends "base.html.twig" %}
-{% block title %}| New Essay{% endblock %}
+{% block title %}| New Capsule{% endblock %}
 {% block content %}
-    <h1>New Essay</h1>
+    <h1>New Capsule</h1>
     <div class="alert alert-secondary">
-        <span>All essays go through a 3-day embargo. After they leave the embargo they cannot be deleted. <a
+        <span>All capsules go through a 3-day embargo. After they leave the embargo they cannot be deleted. <a
                     href="{{ path('app_about') }}">Learn more here</a></span>
     </div>
     {{ form_start(form) }}
@@ -46,7 +46,7 @@
 
         {{ form_row(form._token) }}
         {{ form_widget(form.submit, {'attr': {'class': 'btn btn-primary mb-3'}}) }}
-        <button id="saveToDrafts" class="btn btn-secondary mb-3" formaction="{{ path('app_new_essay', {id: "new"}) }}?isDraft=true">Save to Drafts</button>
+        <button id="saveToDrafts" class="btn btn-secondary mb-3" formaction="{{ path('app_new_capsule', {id: "new"}) }}?isDraft=true">Save to Drafts</button>
     {{ form_end(form, {render_rest: false}) }}
 {% endblock %}
 

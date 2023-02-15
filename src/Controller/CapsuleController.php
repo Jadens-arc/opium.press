@@ -14,10 +14,10 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class EssayController extends AbstractController
+class CapsuleController extends AbstractController
 {
 
-    #[Route('/essay/share/{id}', name: 'app_share_essay')]
+    #[Route('/capsule/share/{id}', name: 'app_share_capsule')]
     public function share(Request $request, ManagerRegistry $doctrine, $id): Response
     {
         $post = $doctrine->getRepository(Post::class)->findOneBy(['id' => $id]);
@@ -32,12 +32,12 @@ class EssayController extends AbstractController
             $output,
             $code
         );
-        return $this->render('essay/share.html.twig',
-            ['post' => $filename, 'url' => $this->generateUrl("app_view_essay", ["id" => $id], UrlGenerator::ABSOLUTE_URL) ]);
+        return $this->render('capsule/share.html.twig',
+            ['post' => $filename, 'url' => $this->generateUrl("app_view_capsule", ["id" => $id], UrlGenerator::ABSOLUTE_URL) ]);
     }
 
-    #[Route('/essay/edit/{id}', name: 'app_new_essay')]
-    public function newEssay(Request $request, ManagerRegistry $doctrine, UserInterface $user, $id): Response
+    #[Route('/capsule/edit/{id}', name: 'app_new_capsule')]
+    public function newCapsule(Request $request, ManagerRegistry $doctrine, UserInterface $user, $id): Response
     {
         $post = new Post();
         $post->setCreator($user);
@@ -102,10 +102,10 @@ class EssayController extends AbstractController
                 return $this->redirectToRoute('app_embargo');
             }
         }
-        return $this->renderForm('essay/new.html.twig', ["form"=>$form]);
+        return $this->renderForm('capsule/new.html.twig', ["form"=>$form]);
     }
 
-    #[Route('/essay/delete/{id}', name: 'app_delete_essay')]
+    #[Route('/capsule/delete/{id}', name: 'app_delete_capsule')]
     public function delete(Request $request, ManagerRegistry $doctrine, UserInterface $user, $id): Response
     {
         $em = $doctrine->getManager();
@@ -129,7 +129,7 @@ class EssayController extends AbstractController
         return $this->redirectToRoute('app_homepage');
     }
 
-    #[Route('/essay/post_draft/{id}', name: 'app_essay_post_draft')]
+    #[Route('/capsule/post_draft/{id}', name: 'app_capsule_post_draft')]
     public function postDraft(Request $request, ManagerRegistry $doctrine, UserInterface $user, $id): Response {
         $em = $doctrine->getManager();
         $post = $doctrine->getRepository(Post::class)->find($id);
@@ -148,7 +148,7 @@ class EssayController extends AbstractController
         }
     }
 
-    #[Route('/essay/{id}', name: 'app_view_essay')]
+    #[Route('/capsule/{id}', name: 'app_view_capsule')]
     public function index(Request $request, ManagerRegistry $doctrine, $id): Response
     {
 
@@ -156,14 +156,19 @@ class EssayController extends AbstractController
         $currentDate->modify("-3 day");
         $currentDate = $currentDate->format('Y-m-d H:i:s');
 
-        $post = $doctrine
-            ->getManager()
-            ->createQuery("SELECT p FROM App\Entity\Post p WHERE p.id = $id AND p.creationDate < '$currentDate'")
-            ->getResult();
+        $post = $doctrine->getRepository(Post::class)
+            ->createQueryBuilder('p')
+            ->where('p.id = :id')
+            ->setParameter("id", $id)
+            ->andWhere('p.creationDate < :currentDate')
+            ->setParameter("currentDate", $currentDate)
+            ->getQuery()
+            ->getResult()
+        ;
 
         if (!$post) {
             return $this->redirect('/');
         }
-        return $this->renderForm('essay/index.html.twig', ["post" => $post[0]]);
+        return $this->renderForm('capsule/index.html.twig', ["post" => $post[0]]);
     }
 }
