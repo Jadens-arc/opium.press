@@ -30,22 +30,22 @@
     <hr>
     {% if not posts %}
         {% if app.user and app.user.username == writer.username %}
-            <h3 class="text-muted text-center">No Essays :( Why don't you write something</h3>
+            <h3 class="text-muted text-center">No Capsules:( Why don't you write something</h3>
         {% else %}
             <h3 class="text-muted text-center">Who ever runs this account is antisocial</h3>
         {% endif %}
     {% else %}
         {% if app.user and app.user.username == writer.username %}
-            <h2 class="h2 text-muted">Your Essays</h2>
+            <h2 class="h2 text-muted">Your Capsules</h2>
         {% else %}
             {% if writer.displayName|last == 's' %}
-                <h2 class="h2 text-muted">{{ writer.displayName }}' Essays</h2>
+                <h2 class="h2 text-muted">{{ writer.displayName }}' Capsules</h2>
             {% else %}
-                <h2 class="h2 text-muted">{{ writer.displayName }}'s Essays</h2>
+                <h2 class="h2 text-muted">{{ writer.displayName }}'s Capsules</h2>
             {% endif %}
         {% endif %}
     {% endif %}
 
-    {% include 'essays.html.twig' %}
+    {% include 'capsules.html.twig' %}
 {% endblock %}
 
