@@ -42,9 +42,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string', length: 255, unique: true)]
     private $username;
 
-    #[ORM\Column(type: 'array', nullable: true)]
-    private $saved = [];
-
     #[ORM\OneToMany(mappedBy: 'creator', targetEntity: Post::class, orphanRemoval: true)]
     private Collection $posts;
 
@@ -54,11 +51,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: self::class, mappedBy: 'subscriptions')]
     private Collection $subscribers;
 
+    #[ORM\ManyToMany(targetEntity: Post::class)]
+    private Collection $saves;
+
     public function __construct()
     {
         $this->posts = new ArrayCollection();
         $this->subscriptions = new ArrayCollection();
         $this->subscribers = new ArrayCollection();
+        $this->saves = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -155,18 +156,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getSaved(): ?array
-    {
-        return $this->saved;
-    }
-
-    public function setSaved(?array $saved): self
-    {
-        $this->saved = $saved;
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, Post>
      */
@@ -244,6 +233,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         if ($this->subscribers->removeElement($subscriber)) {
             $subscriber->removeSubscription($this);
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Post>
+     */
+    public function getSaves(): Collection
+    {
+        return $this->saves;
+    }
+
+    public function addSave(Post $save): self
+    {
+        if (!$this->saves->contains($save)) {
+            $this->saves->add($save);
+        }
+
+        return $this;
+    }
+
+    public function removeSave(Post $save): self
+    {
+        $this->saves->removeElement($save);
 
         return $this;
     }
