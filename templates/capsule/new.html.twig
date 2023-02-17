@@ -84,14 +84,6 @@
                 newTag.innerText = "#" + tag
                 newTag.classList.add('list-group-item')
 
-                newTag.addEventListener("mouseover", (e) => {
-                    newTag.classList.add("list-group-item-danger")
-                })
-
-                newTag.addEventListener("mouseout", (e) => {
-                    newTag.classList.remove("list-group-item-danger")
-                })
-
                 newTag.addEventListener("click", (e) => {
                     newTag.remove()
                     tags.splice(tags.length-1, 1)

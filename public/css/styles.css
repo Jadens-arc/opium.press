@@ -27,6 +27,17 @@
     box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
 }
 
+.list-group-item {
+    background-color: var(--bs-body-bg);
+    border-color: var(--bs-body-color);
+    color: var(--bs-body-color);
+    transition: all ease 0.2s;
+}
+
+.list-group-item:hover{
+    background-color: var(--bs-danger);
+}
+
 .navbar {
     --bs-navbar-color: white;
     --bs-navbar-hover-color: rgb(169, 177, 214);
