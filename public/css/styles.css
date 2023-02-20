@@ -1,4 +1,9 @@
-@font-face { font-family: Ubuntu; src: url('/Ubuntu/Ubuntu-Regular.ttf'); }
+@font-face {
+    font-family: Ubuntu;
+    src: local('sans-sarif'),
+    url('/Ubuntu/Ubuntu-Regular.ttf');
+    font-display: swap;
+}
 
 :root {
     --bs-body-bg: rgb(31, 32, 47);
