@@ -6,7 +6,7 @@
             <img src="{{ src }}"
                  height="600vh"
                  class="story rounded mb-5">
-            <a download href="{{ src }}" class="btn btn-primary">Save Image</a>
+            <a download href="{{ src }}" id="saveImage" class="btn btn-primary">Save Image</a>
         </div>
         <div class="col-sm d-flex flex-column justify-content-center align-items-center">
             <h1>Post the image</h1>
@@ -14,4 +14,10 @@
             <p class="alert alert-secondary">{{ url }}</p>
         </div>
     </div>
+    <script>
+        let saveBtn = document.getElementById('saveImage');
+        saveBtn.addEventListener('click', (e) => {
+            window.location = 'instagram-stories://share';
+        });
+    </script>
 {% endblock %}
