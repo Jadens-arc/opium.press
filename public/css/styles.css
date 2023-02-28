@@ -1,3 +1,7 @@
+html {
+    overflow-x: hidden;
+}
+
 @font-face {
     font-family: Ubuntu;
     src: local('sans-sarif'),
@@ -65,8 +69,25 @@
 
 .story {
     transform: scale(0.95);
-    animation: story-fade-in 1s 1s ease forwards;
     border: 1px solid rgba(255,255,255,0.14);
+    filter:  drop-shadow(0px 0px 0px rgba(0,0,0,0));
+
+    -webkit-animation: story-fade-in 1s;
+    -moz-animation: story-fade-in 1s;
+    -ms-animation: story-fade-in 1s;
+
+    -webkit-animation-duration: 1s;
+    -moz-animation-duration: 1s;
+    -ms-animation-duration: 1s;
+
+    -webkit-animation-delay: 1s;
+    -moz-animation-delay: 1s;
+    -ms-animation-delay: 1s;
+
+    animation-fill-mode: both;
+    -webkit-animation-fill-mode: both;
+    -moz-animation-fill-mode: both;
+    -ms-animation-fill-mode: both;
 }
 
 @keyframes story-fade-in {
