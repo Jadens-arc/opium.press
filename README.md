@@ -2,6 +2,7 @@
 ## Deploying your own server
 ### Prerequisites 
 - PHP 8.1 or higher
+- PHP GD
 - Composer
 - A database (MariaDB recommended)
 - Symfony CLI
