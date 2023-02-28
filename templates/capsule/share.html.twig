@@ -1,10 +1,17 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
-    <div class="text-center">
-        <img src="/shares/{{ post }}" height="500vh" class="rounded mb-5" style="filter: drop-shadow(5px 5px 10px grey)" >
-        <h1>Post the image</h1>
-        <h1>Use this link</h1>
-        <p class="alert alert-secondary">{{ url }}</p>
+    <div class="text-center row d-flex ">
+        <div class="mb-3 col-sm d-flex flex-column justify-content-center align-items-center">
+            <img src="{{ src }}"
+                 height="600vh"
+                 class="story rounded mb-5">
+            <a download href="{{ src }}" class="btn btn-primary">Save Image</a>
+        </div>
+        <div class="col-sm d-flex flex-column justify-content-center align-items-center">
+            <h1>Post the image</h1>
+            <h1 class="mb-5">Use this link</h1>
+            <p class="alert alert-secondary">{{ url }}</p>
+        </div>
     </div>
 {% endblock %}

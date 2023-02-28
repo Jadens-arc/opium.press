@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Post;
 use App\Entity\User;
 use App\Form\PostType;
+use App\Service\ImageGenerator;
 use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,22 +19,27 @@ class CapsuleController extends AbstractController
 {
 
     #[Route('/capsule/share/{id}', name: 'app_share_capsule')]
-    public function share(Request $request, ManagerRegistry $doctrine, $id): Response
+    public function share(Request $request, ManagerRegistry $doctrine, ImageGenerator $imageGenerator, $id): Response
     {
-        $post = $doctrine->getRepository(Post::class)->findOneBy(['id' => $id]);
-        $pattern = "/[^_a-z0-9- ]/i";
-        $title = preg_replace($pattern,'', $post->getTitle());
-        $content = preg_replace($pattern,'', $post->getContent());
-        $filename = $post->getCreator()->getId() . "-" . $post->getId(). ".png";
-        $output = "hi";
-        $code = null;
-        $command = exec(
-            "python3 /home/jaden/Opium-Scripts/main.py \"$filename\" \"$title\" \"$content\" 2>&1",
-            $output,
-            $code
-        );
-        return $this->render('capsule/share.html.twig',
-            ['post' => $filename, 'url' => $this->generateUrl("app_view_capsule", ["id" => $id], UrlGenerator::ABSOLUTE_URL) ]);
+        $post = $doctrine->getRepository(Post::class)->find($id);
+        $filepath = $imageGenerator->generateStory($post);
+        return $this->render('capsule/share.html.twig', [
+            'src' => $filepath,
+            'url' => $this->generateUrl('app_view_capsule', ['id' => $id], UrlGenerator::ABSOLUTE_URL)
+        ]);
+//        $pattern = "/[^_a-z0-9- ]/i";
+//        $title = preg_replace($pattern,'', $post->getTitle());
+//        $content = preg_replace($pattern,'', $post->getContent());
+//        $filename = $post->getCreator()->getId() . "-" . $post->getId(). ".png";
+//        $output = "hi";
+//        $code = null;
+//        $command = exec(
+//            "python3 /home/jaden/Opium-Scripts/main.py \"$filename\" \"$title\" \"$content\" 2>&1",
+//            $output,
+//            $code
+//        );
+//        return $this->render('capsule/share.html.twig',
+//            ['post' => $filename, 'url' => $this->generateUrl("app_view_capsule", ["id" => $id], UrlGenerator::ABSOLUTE_URL) ]);
     }
 
     #[Route('/capsule/edit/{id}', name: 'app_new_capsule')]
