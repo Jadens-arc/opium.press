@@ -31,6 +31,10 @@
         <link rel="stylesheet" href="{{ asset('css/bootstrap.css') }}">
         <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
         <script defer src="{{ asset('css/bootstrap.js') }}"></script>
+        <script>
+            /*to prevent Firefox FOUC, this must be here*/
+            let FF_FOUC_FIX;
+        </script>
     </head>
     <body class="" style="min-height: 100vh">
         <nav class="navbar navbar-expand-sm" style="margin-bottom: 20px">
