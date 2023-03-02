@@ -39,7 +39,12 @@
     <body class="" style="min-height: 100vh">
         <nav class="navbar navbar-expand-sm" style="margin-bottom: 20px">
             <div class="container-lg d-flex">
+                <div>
                 <a class="navbar-brand" href="/"><img alt="Opium Logo" src="{{ asset('images/Opium.svg') }}" alt="" height="30" ></a>
+                {% if app.user %}
+                    <strong>Welcome Back,  {{ app.user.displayName }}</strong>
+                {% endif %}
+                </div>
                 <button
                         class="navbar-toggler"
                         type="button"
@@ -49,7 +54,7 @@
                         aria-expanded="false"
                         aria-label="Toggle navigation"
                 >
-                    <span class="navbar-toggler-icon"></span>
+                    <span class="navbar-dark navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
