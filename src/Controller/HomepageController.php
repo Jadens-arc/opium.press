@@ -46,7 +46,9 @@ class HomepageController extends AbstractController
         ;
 
         $posts = $qb->getQuery()->getResult();
-        return $this->render('homepage/index.html.twig', ["title" => "Latest Capsules...",  "posts"=>$posts]);
+        $title =  "Latest Capsules... ";
+        if ($searchQuery) $title = "Results for \"$searchQuery\"";
+        return $this->render('homepage/index.html.twig', ["title" => $title,  "posts"=>$posts]);
     }
 
 }
