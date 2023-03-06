@@ -10,4 +10,7 @@
     {% endif %}
     <h1>{{ title }}</h1>
     {% include 'capsules.html.twig' %}
+    <div class="m-4">
+        {{ pagerfanta(pager) }}
+    </div>
 {% endblock %}

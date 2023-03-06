@@ -106,3 +106,7 @@ html {
         border: 1px solid rgba(255,255,255,0);
     }
 }
+.pagination__item {
+    margin-right: 0.25rem !important;
+    margin-left: 0.25rem !important;
+}

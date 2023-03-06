@@ -2,8 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Post;
 use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
+use Pagerfanta\Doctrine\ORM\QueryAdapter;
+use Pagerfanta\Pagerfanta;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -21,11 +24,23 @@ class EmbargoController extends AbstractController
         $currentDate = new DateTime();
         $currentDate->modify("-3 day");
         $currentDate = $currentDate->format('Y-m-d H:i:s');
-        $id = $user->getId();
-        $posts = $doctrine
-            ->getManager()
-            ->createQuery("SELECT p FROM App\Entity\Post p WHERE p.creator = $id AND p.creationDate > '$currentDate' ORDER BY p.creationDate DESC")
-            ->getResult();
-        return $this->render('embargo/index.html.twig', ["posts"=>$posts]);
+
+        $qb = $doctrine->getRepository(Post::class)
+            ->createQueryBuilder('p')
+            ->where('p.creator = :user')
+            ->setParameter("user", $user)
+            ->andWhere('p.creationDate > :currentDate')
+            ->setParameter('currentDate', $currentDate)
+            ->orderBy('p.creationDate', 'DESC')
+        ;
+
+        $adapter = new QueryAdapter($qb);
+        $pagerfanta = new Pagerfanta($adapter);
+
+        if (isset($_GET["page"])) {
+            $pagerfanta->setCurrentPage($_GET["page"]);
+        }
+
+        return $this->render('embargo/index.html.twig', ["posts"=>$pagerfanta->getCurrentPageResults(), 'pager' => $pagerfanta]);
     }
 }

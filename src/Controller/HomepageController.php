@@ -9,6 +9,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Post;
+use Pagerfanta\Pagerfanta;
+use Pagerfanta\Adapter\ArrayAdapter;
+use Pagerfanta\Doctrine\ORM\QueryAdapter;
+
+
 
 class HomepageController extends AbstractController
 {
@@ -45,10 +50,16 @@ class HomepageController extends AbstractController
             ->orderBy('p.creationDate', 'DESC')
         ;
 
-        $posts = $qb->getQuery()->getResult();
+        $adapter = new QueryAdapter($qb);
+        $pagerfanta = new Pagerfanta($adapter);
+
+        if (isset($_GET["page"])) {
+            $pagerfanta->setCurrentPage($_GET["page"]);
+        }
+
         $title =  "Latest Capsules... ";
         if ($searchQuery) $title = "Results for \"$searchQuery\"";
-        return $this->render('homepage/index.html.twig', ["title" => $title,  "posts"=>$posts]);
+        return $this->render('homepage/index.html.twig', ["title" => $title,  "posts"=>$pagerfanta->getCurrentPageResults(), 'pager' => $pagerfanta]);
     }
 
 }

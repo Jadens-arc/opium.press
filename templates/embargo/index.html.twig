@@ -8,5 +8,9 @@
         <h3 class="text-muted text-center">Nothing yet :( Just be thoughtful about what you write</h3
     {% endif %}
 
-   {% include 'capsules.html.twig' %}
+    {% include 'capsules.html.twig' %}
+
+    {% if posts|length > 0 %}
+        {{ pagerfanta(pager) }}
+    {% endif %}
 {% endblock %}
