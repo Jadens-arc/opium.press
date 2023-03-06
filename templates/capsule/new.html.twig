@@ -45,8 +45,13 @@
         </div>
 
         {{ form_row(form._token) }}
-        {{ form_widget(form.submit, {'attr': {'class': 'btn btn-primary mb-3'}}) }}
-        <button id="saveToDrafts" class="btn btn-secondary mb-3" formaction="{{ path('app_new_capsule', {id: "new"}) }}?isDraft=true">Save to Drafts</button>
+        <div class="d-flex justify-content-between">
+            <div class="">
+                {{ form_widget(form.submit, {'attr': {'class': 'btn btn-primary'}}) }}
+                <button id="saveToDrafts" class="btn btn-secondary" formaction="{{ path('app_new_capsule', {id: "new"}) }}?isDraft=true">Save to Drafts</button>
+            </div>
+            <a class="btn btn-outline-secondary" href="{{ url('app_view_capsule', {id: 91}) }}">Learn more</a>
+        </div>
     {{ form_end(form, {render_rest: false}) }}
 {% endblock %}
 
