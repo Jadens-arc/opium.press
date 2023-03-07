@@ -47,7 +47,7 @@
         </h6>
         <div class="m-2">
             {% if post.creationDate %}
-                <span class="d-block text-muted">{{ post.creationDate.format('Y-m-d H:i:s') | format_datetime(locale='en', timezone='America/Los_Angeles') }}</span>
+                <span class="d-block text-muted">{{ post.creationDate | format_datetime(locale='en', pattern="MMMM dd, yyyy 'at' h:m B", timezone='America/Los_Angeles') }}</span>
             {% endif %}
             {% for tag in post.tags %}
                 <a href="{{ path('app_homepage', {'q': '#' ~ tag}) }}"  style="text-decoration: none;" class="badge text-bg-primary mx-1">#{{ tag }}</a>
