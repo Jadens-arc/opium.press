@@ -3,25 +3,25 @@
 {% block title %}| {{ post.title }}{% endblock %}
 
 {% block content %}
-    <div class="card-header" style="display: flex; justify-content: space-between">
-        <div class="d-flex flex-row" style="flex-grow: 1">
+    <div class="card-header row">
+        <div class="col-sm d-flex flex-row" style="flex-grow: 1">
             <a href="/capsule/share/{{ post.id }}">
                 <img src="/brands/instagram.svg" class="icon mx-2" style="width: 1rem;" alt="">
             </a>
             <span class="d-block mx-2 fw-bold text-capitalize">{{ post.creator.displayName }}</span>
             <a class="d-block mx-2 fw-light text-muted" href="/writer/{{ post.creator.username }}">@{{ post.creator.username }}</a>
-            <div class="overflow-scroll tags" style="scrollbar-width: none;">
-                {% for tag in post.tags %}
-                    <a href="{{ path('app_homepage', {'q': '#' ~ tag}) }}"  style="text-decoration: none;" class="badge text-bg-primary mx-1">#{{ tag }}</a>
-                {% endfor %}
-            </div>
-        </div>
-        <div class="d-flex flex-row justify-content-between">
-            <span class="d-block text-muted mx-2">{{ post.creationDate.format('Y-m-d H:i:s') }}</span>
         </div>
     </div>
 
     <hr>
+    <div class="d-flex flex-row">
+        <span class="d-block text-muted mx-2">{{ post.creationDate.format('Y-m-d H:i:s') }}</span>
+        <div class="tags mb-5 d-flex flex-row" style="overflow-y: hidden; scrollbar-width: none;">
+            {% for tag in post.tags %}
+                <a href="{{ path('app_homepage', {'q': '#' ~ tag}) }}"  style="text-decoration: none;" class="badge d-block text-bg-primary mx-1">#{{ tag }}</a>
+            {% endfor %}
+        </div>
+    </div>
     <h5 class="h1">{{ post.title }}</h5>
     <div class="p">{{ post.content|nl2br }}</div>
     {% if post.sources %}
