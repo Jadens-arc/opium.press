@@ -57,7 +57,7 @@ class WriterController extends AbstractController
             ->where('p.creator = :user')
             ->setParameter('user', $user)
             ->andWhere('p.creationDate is null')
-            ->orderBy('p.creationDate', 'DESC')
+            ->orderBy('p.id', 'DESC')
         ;
 
         $adapter = new QueryAdapter($qb);
