@@ -14,4 +14,9 @@
         {% endfor %}
     </div>
     {% include 'capsules.html.twig' %}
+    <div class="m-4">
+        {% if posts|length > 0 %}
+            {{ pagerfanta(pager) }}
+        {% endif %}
+    </div>
 {% endblock %}

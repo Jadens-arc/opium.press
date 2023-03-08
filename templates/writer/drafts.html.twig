@@ -7,4 +7,9 @@
         <h3 class="text-muted text-center">Nothing yet :( go write something</h3
     {% endif %}
     {% include 'capsules.html.twig' %}
+    {% if posts|length > 0 %}
+        <div class="m-4">
+            {{ pagerfanta(pager) }}
+        </div>
+    {% endif %}
 {% endblock %}

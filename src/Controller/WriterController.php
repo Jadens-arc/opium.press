@@ -6,6 +6,8 @@ use App\Entity\Post;
 use App\Entity\User;
 use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
+use Pagerfanta\Doctrine\ORM\QueryAdapter;
+use Pagerfanta\Pagerfanta;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,24 +28,48 @@ class WriterController extends AbstractController
         if (!$writer) {
             return $this->redirect('/');
         }
-        $posts = $doctrine->getRepository(Post::class)
+        $qb = $doctrine->getRepository(Post::class)
             ->createQueryBuilder('p')
             ->where('p.creationDate < :currentDate')
             ->setParameter('currentDate', $currentDate)
             ->andWhere('p.creator = :writer')
             ->setParameter('writer', $writer)
             ->orderBy('p.creationDate', 'DESC')
-            ->getQuery()
-            ->getResult();
+            ->getQuery();
+
+        $adapter = new QueryAdapter($qb);
+        $pagerfanta = new Pagerfanta($adapter);
+
+        if (isset($_GET["page"])) {
+            $pagerfanta->setCurrentPage($_GET["page"]);
+        }
         return $this->render('writer/index.html.twig', [
-            'posts' => $posts,
+            'posts' => $pagerfanta->getCurrentPageResults(),
+            'pager' => $pagerfanta,
             'writer' => $writer
         ]);
     }
 
     #[Route('/drafts', name: "app_drafts")]
     public function drafts(Request $request, ManagerRegistry $doctrine, UserInterface $user): Response {
-        $posts = $doctrine->getRepository(Post::class)->findBy(["creator" => $user, "creationDate" => null]);
-        return $this->render('writer/drafts.html.twig', ["posts" => $posts, "title" => "Drafts"]);
+        $qb = $doctrine->getRepository(Post::class)
+            ->createQueryBuilder('p')
+            ->where('p.creator = :user')
+            ->setParameter('user', $user)
+            ->andWhere('p.creationDate is null')
+            ->orderBy('p.creationDate', 'DESC')
+        ;
+
+        $adapter = new QueryAdapter($qb);
+        $pagerfanta = new Pagerfanta($adapter);
+
+        if (isset($_GET["page"])) {
+            $pagerfanta->setCurrentPage($_GET["page"]);
+        }
+        return $this->render('writer/drafts.html.twig', [
+            "posts" => $pagerfanta->getCurrentPageResults(),
+            "title" => "Drafts",
+            "pager" => $pagerfanta
+        ]);
     }
 }

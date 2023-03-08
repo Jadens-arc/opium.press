@@ -11,6 +11,8 @@
     {% include 'capsules.html.twig' %}
 
     {% if posts|length > 0 %}
-        {{ pagerfanta(pager) }}
+        <div class="m-4">
+            {{ pagerfanta(pager) }}
+        </div>
     {% endif %}
 {% endblock %}

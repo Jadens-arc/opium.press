@@ -5,6 +5,8 @@ namespace App\Controller;
 use Container1vwxooY\getRedirectControllerService;
 use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
+use Pagerfanta\Doctrine\ORM\QueryAdapter;
+use Pagerfanta\Pagerfanta;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,18 +28,25 @@ class UserFavoritesController extends AbstractController
         $currentDate = $currentDate->format('Y-m-d H:i:s');
 
         $repo = $em->getRepository(Post::class);
-        $posts = $repo->createQueryBuilder('p')
+        $qb = $repo->createQueryBuilder('p')
             ->where('p.creationDate < :currentDate')
             ->setParameter('currentDate', $currentDate)
             ->andWhere('p.creator in (:subscriptions)')
             ->setParameter('subscriptions', $user->getSubscriptions())
             ->orderBy('p.creationDate', 'DESC')
-            ->getQuery()
-            ->getResult();
+            ->getQuery();
+
+        $adapter = new QueryAdapter($qb);
+        $pagerfanta = new Pagerfanta($adapter);
+
+        if (isset($_GET["page"])) {
+            $pagerfanta->setCurrentPage($_GET["page"]);
+        }
 
         return $this->render('user_favorites/subscriptions.html.twig', [
             "title" => "Subscriptions",
-            "posts"=>$posts,
+            "posts" => $pagerfanta->getCurrentPageResults(),
+            "pager" => $pagerfanta,
             "subscriptions" => $user->getSubscriptions()
         ]);
     }
