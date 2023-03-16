@@ -9,7 +9,10 @@
         <h6 class="card-header" style="cursor: pointer" onclick="window.location='{{ path('app_view_capsule', {'id': post.id}) }}'">
             <div class="col-sm d-flex flex-row" style="flex-grow: 1">
                 {% if (app.user and is_granted('ROLE_ADMIN')) or not post.creationDate or ("-3 days"|date("Y-m-d H:i:s") < post.creationDate.format('Y-m-d H:i:s'))  %}
-                    <a href="{{ path('app_delete_capsule', {'id': post.id}) }}">
+                    <a
+                            href="{{ path('app_delete_capsule', {'id': post.id}) }}"
+                            onclick="return confirm('Are you sure you want to delete this');"
+                    >
                         <img class="icon" alt="Trash can" src="{{ asset('regular/trash-can.svg') }}" style="margin-right:20px; width: 1rem;">
                     </a>
                 {% endif %}
@@ -18,9 +21,6 @@
                       <img class="icon" alt="Instagram Logo" src="{{ asset('brands/instagram.svg') }}" style="margin-right:20px; width: 1rem;">
                     </a>
                 {% else %}
-                    <a href="{{ path('app_capsule_post_draft', {'id': post.id}) }}">
-                        <img class="icon" alt="share" src="{{ asset('regular/share-from-square.svg') }}" style="margin-right:20px; width: 1rem;">
-                    </a>
                     <a href="{{ path('app_new_capsule', {'id': post.id}) }}">
                         <img class="icon" alt="share" src="{{ asset('regular/pen-to-square.svg') }}" style="margin-right:20px; width: 1rem;">
                     </a>
