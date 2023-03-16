@@ -45,7 +45,7 @@
         </div>
 
         {{ form_row(form._token) }}
-        <div class="d-flex justify-content-between">
+        <div class="d-flex justify-content-between mb-5">
             <div class="">
                 {{ form_widget(form.submit, {'attr': {'class': 'btn btn-primary'}}) }}
                 <button id="saveToDrafts" class="btn btn-secondary" formaction="{{ path('app_new_capsule', {id: "new"}) }}?isDraft=true">Save to Drafts</button>
