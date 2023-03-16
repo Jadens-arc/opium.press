@@ -95,14 +95,17 @@ class CapsuleController extends AbstractController
                 $post->setSources(explode(",", $sourceInput));
             }
 
-            $post->setTitle($formData['title']);
-            $post->setContent($formData['content']);
 
             if ($request->query->get("isDraft")) {
+                $post->setTitle($formData['title']);
+                $post->setContent($formData['content']);
                 $em->merge($post);
                 $em->flush();
                 return $this->redirectToRoute('app_drafts');
             } else {
+
+                $post->setTitle($form['title']->getData());
+                $post->setContent($form['content']->getData());
                 $em->persist($post);
                 $em->flush();
                 return $this->redirectToRoute('app_embargo');
