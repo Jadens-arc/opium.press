@@ -12,7 +12,9 @@
                 <span class="d-block mx-2 fw-bold text-capitalize">{{ post.creator.displayName }}</span>
                 <a class="d-block mx-2 fw-light text-muted" href="/writer/{{ post.creator.username }}">@{{ post.creator.username }}</a>
             </div>
-            <span class="d-block col-sm text-muted mx-2">{{ post.creationDate.format('Y-m-d H:i:s') }}</span>
+            {% if post.creationDate %}
+                <span class="d-block col-sm text-muted mx-2">{{ post.creationDate.format('Y-m-d H:i:s') }}</span>
+            {% endif %}
         </div>
     </div>
 

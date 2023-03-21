@@ -158,7 +158,7 @@ class CapsuleController extends AbstractController
     }
 
     #[Route('/capsule/{id}', name: 'app_view_capsule')]
-    public function index(Request $request, ManagerRegistry $doctrine, $id): Response
+    public function index(Request $request, ManagerRegistry $doctrine, UserInterface $user=null, $id): Response
     {
 
         $currentDate = new DateTime();
@@ -169,8 +169,9 @@ class CapsuleController extends AbstractController
             ->createQueryBuilder('p')
             ->where('p.id = :id')
             ->setParameter("id", $id)
-            ->andWhere('p.creationDate < :currentDate')
+            ->andWhere('p.creationDate < :currentDate or p.creator = :user')
             ->setParameter("currentDate", $currentDate)
+            ->setParameter("user", $user)
             ->getQuery()
             ->getResult()
         ;
