@@ -45,7 +45,7 @@
                 
             </div>
         </h6>
-        {% if post.creationDate and post.tags %}
+        {% if post.creationDate or post.tags %}
             <div class="m-2">
                 {% if post.creationDate %}
                     <span class="d-block text-muted">{{ post.creationDate | format_datetime(locale='en', pattern="MMMM dd, yyyy 'at' h:m a", timezone='America/Los_Angeles') }}</span>
