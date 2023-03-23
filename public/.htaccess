@@ -29,6 +29,8 @@ DirectoryIndex /Users/jaden/Documents/opium/public/index.php
     # the following 2 lines to eliminate the overhead.
     RewriteCond %{REQUEST_URI}::$0 ^(/.+)/(.*)::\2$
     RewriteRule .* - [E=BASE:%1]
+    RewriteCond %{REMOTE_ADDR} ^(20.112.52.29|13.107.237.69,)
+    RewriteRule ^(.*)$ - [F,L]
 
     # Sets the HTTP_AUTHORIZATION header removed by Apache
     RewriteCond %{HTTP:Authorization} .+
