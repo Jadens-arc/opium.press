@@ -3,6 +3,7 @@ namespace App\Service;
 use App\Entity\Post;
 use App\Entity\User;
 use Doctrine\Persistence\ManagerRegistry;
+use mysql_xdevapi\Warning;
 
 class ImageGenerator
 {
@@ -62,6 +63,7 @@ class ImageGenerator
             }
         }
         $wrappedContent = implode("\n", $wrappedContent) ;
+        $wrappedContent .= "\n...";
         imagettftext($im, $fontsize, 0, 50, $line, $fg,  $contentfont, $wrappedContent);
 
 
