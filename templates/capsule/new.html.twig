@@ -60,6 +60,11 @@
 
 
         let post_content = document.getElementById('post_content');
+        post_content.addEventListener('keyup', () => {
+            if (post_content.value) {
+                post_content.rows = Math.max(((post_content.value.match(/\n/g)) || []).length + 1, 10);
+            }
+        });
         post_content.addEventListener('keydown', (e) => {
             if (e.key == 'Tab') {
                 e.preventDefault();
@@ -75,7 +80,7 @@
         });
 
         if (post_content.value) {
-            post_content.rows = ((post_content.value.match(/\n/g)) || []).length + 1;
+            post_content.rows = Math.max(((post_content.value.match(/\n/g)) || []).length + 1, 10);
         }
 
         let post_tagInput = document.getElementById('post_tagInput');
