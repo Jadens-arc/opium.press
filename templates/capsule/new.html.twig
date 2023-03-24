@@ -74,6 +74,10 @@
             }
         });
 
+        if (post_content.value) {
+            post_content.rows = ((post_content.value.match(/\n/g)) || []).length + 1;
+        }
+
         let post_tagInput = document.getElementById('post_tagInput');
         let tagList = document.getElementById('tagList');
 
