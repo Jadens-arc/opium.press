@@ -111,3 +111,15 @@ html {
     margin-right: 0.25rem !important;
     margin-left: 0.25rem !important;
 }
+
+.card-content {
+    line-height: 1.6rem;
+    margin: 0;
+    overflow-y: hidden;
+    transition: max-height 0.2s ease-out;
+    max-height: fit-content;
+}
+
+.collapsed {
+    max-height: 16rem;
+}

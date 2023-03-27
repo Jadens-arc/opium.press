@@ -1,7 +1,12 @@
 {% extends "base.html.twig" %}
 {% block title %}| New Capsule{% endblock %}
 {% block content %}
-    <h1>New Capsule</h1>
+    {% if data['replying-to'] is defined %}
+    <h1>Replying To {{ data['replying-to'].creator.displayName }}</h1>
+        {% include 'capsule.html.twig' with {'post': data['replying-to']} %}
+    {% else %}
+        <h1>New Capsule</h1>
+    {% endif %}
 {#    <div class="alert alert-secondary">#}
 {#        <span>All capsules go through a 3-day embargo. After they leave the embargo they cannot be deleted. <a#}
 {#                    href="{{ path('app_about') }}">Learn more here</a></span>#}

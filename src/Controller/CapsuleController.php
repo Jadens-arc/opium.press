@@ -48,8 +48,10 @@ class CapsuleController extends AbstractController
         $post = new Post();
         $post->setCreator($user);
 
+        $data=[];
+
         $form = $this->createForm(PostType::class);
-        if ($id != "new" && is_numeric($id)) {
+        if ($id != "new" && is_numeric($id)) { // editing draft
             $post = $doctrine->getRepository(Post::class)->find($id);
             $post->setCreator($user);
             $form = $this->createForm(PostType::class, $post);
@@ -57,9 +59,16 @@ class CapsuleController extends AbstractController
                 $form['tagInput']->setData(implode(",", $post->getTags()));
             if ($post->getSources())
                 $form['sourceInput']->setData(implode(",", $post->getSources()));
-        } else {
+        } else { // completely new post
             $post->tagInput = "";
             $post->sourceInput = "";
+            if ($request->get("replying-to")) {
+                $reply = $doctrine->getRepository(Post::class)->find(
+                    $request->get("replying-to")
+                );
+                $post->setReply($reply);
+                $data['replying-to'] = $reply;
+            }
         }
         $form->handleRequest($request);
 
@@ -111,7 +120,7 @@ class CapsuleController extends AbstractController
                 return $this->redirectToRoute('app_embargo');
             }
         }
-        return $this->renderForm('capsule/new.html.twig', ["form"=>$form]);
+        return $this->renderForm('capsule/new.html.twig', ["form"=>$form, "data" => $data]);
     }
 
     #[Route('/capsule/delete/{id}', name: 'app_delete_capsule')]

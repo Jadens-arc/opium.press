@@ -4,7 +4,7 @@
 
 {% block content %}
     <div class="card-header row mb-2">
-        <div class="col-sm row" style="flex-grow: 1">
+        <div class="row" style="flex-grow: 1">
             <div class="col-auto d-flex flex-row" style="width: fit-content">
                 <a href="/capsule/share/{{ post.id }}">
                     <img src="/brands/instagram.svg" class="icon mx-2" style="width: 1rem;" alt="">
@@ -12,9 +12,13 @@
                 <span class="d-block mx-2 fw-bold text-capitalize">{{ post.creator.displayName }}</span>
                 <a class="d-block mx-2 fw-light text-muted" href="/writer/{{ post.creator.username }}">@{{ post.creator.username }}</a>
             </div>
-            {% if post.creationDate %}
-                <span class="d-block col-sm text-muted mx-2">{{ post.creationDate.format('Y-m-d H:i:s') }}</span>
-            {% endif %}
+            <div class="col-sm">
+                <div class="row flex-grow-0">
+                    {% if post.creationDate %}
+                        <span class="col-sm text-muted flex-grow-1">{{ post.creationDate.format('Y-m-d H:i:s') }}</span>
+                    {% endif %}
+                </div>
+            </div>
         </div>
     </div>
 
@@ -28,6 +32,9 @@
 
     <hr>
 
+    {% if post.reply %}
+        <a class="m-2" href="{{ path('app_view_capsule', {'id': post.reply.id}) }}">Replying to {{ post.reply.title }}</a>
+    {% endif %}
     <h5 class="h1">{{ post.title }}</h5>
     <div class="p">{{ post.content|nl2br }}</div>
     {% if post.sources %}
