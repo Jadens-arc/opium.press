@@ -15,12 +15,14 @@
                 <a href="{{ path('app_share_capsule', {'id': post.id}) }}">
                   <img class="icon" alt="Instagram Logo" src="{{ asset('brands/instagram.svg') }}" style="margin-right:20px; width: 1rem;">
                 </a>
-                <a href="{{ path('app_new_capsule', {'id': 'new', 'replying-to': post.id}) }}">
-                    <img class="icon" alt="Reply" src="{{ asset('regular/share-from-square.svg') }}" style="margin-right: 20px; width: 1rem;">
-                </a>
             {% else %}
                 <a href="{{ path('app_new_capsule', {'id': post.id}) }}">
                     <img class="icon" alt="share" src="{{ asset('regular/pen-to-square.svg') }}" style="margin-right:20px; width: 1rem;">
+                </a>
+            {% endif %}
+            {% if app.user and post.creationDate and ("-3 days"|date("Y-m-d H:i:s") > post.creationDate.format("Y-m-d H:i:s")) %}
+                <a href="{{ path('app_new_capsule', {'id': 'new', 'replying-to': post.id}) }}">
+                    <img class="icon" alt="Reply" src="{{ asset('regular/share-from-square.svg') }}" style="margin-right: 20px; width: 1rem;">
                 </a>
             {% endif %}
             <a href="{{ path('app_writer', {"username": post.creator.username}) }}"
