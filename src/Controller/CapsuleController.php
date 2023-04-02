@@ -112,19 +112,17 @@ class CapsuleController extends AbstractController
             if ($form['reply']->getData())
                 $post->setReply($em->getRepository(Post::class)->find($form['reply']->getData()));
 
+            $post->setTitle($form['title']->getData());
+            $post->setContent($form['content']->getData());
+
             if ($form['isDraft']->getData()) {
-                $post->setTitle($form['title']->getData());
-                $post->setContent($form['content']->getData());
                 $em->merge($post);
                 $em->flush();
                 return $this->redirectToRoute('app_drafts');
-            } else {
-                $post->setTitle($form['title']->getData());
-                $post->setContent($form['content']->getData());
-                $em->persist($post);
-                $em->flush();
-                return $this->redirectToRoute('app_embargo');
             }
+            $em->persist($post);
+            $em->flush();
+            return $this->redirectToRoute('app_embargo');
         }
         return $this->renderForm('capsule/new.html.twig', ["form"=>$form, "data" => $data]);
     }
