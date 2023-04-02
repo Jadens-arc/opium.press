@@ -9,6 +9,7 @@
             {% if app.user and app.user.username == writer.username %}
                 <h4 class="h4 text-muted">{{ writer.email }}</h4>
             {% endif %}
+            <h4>{{ writer.subscribers.count }} Subscriber{{ (writer.subscribers.count == 1) ? '' : 's' }}</h4>
         </div>
         <div class="col-sm d-flex justify-content-end align-items-center ">
             {% if app.user and app.user.username == writer.username %}
