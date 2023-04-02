@@ -35,9 +35,6 @@ class HomepageController extends AbstractController
             if (strpos($searchQuery, "#") !== false) { // searching for hashtags
                 $qb->where("p.tags like :search")
                     ->setParameter('search', "%".$rawSearch."%");
-            } elseif (strpos($searchQuery, "@") !== false) { // searching for usernames
-                $qb->where("p.creator.username like :username")
-                    ->setParameter('username', "%".$rawSearch."%");
             } else { // just searching by content and title
                 $qb->where("p.content like :search")
                     ->orWhere("p.title like :search")
