@@ -22,6 +22,8 @@ class PostType extends AbstractType
             ->add('content', TextareaType::class, ["label" => "Speak Your Mind..."])
             ->add('tags', HiddenType::class, )
             ->add('sources', HiddenType::class, )
+            ->add('isDraft', HiddenType::class, )
+            ->add('reply', HiddenType::class, )
             ->add('tagInput', TextType::class, ["label" => "Add Tags", "required" => false, "mapped" => false])
             ->add('sourceInput', TextType::class, ["label" => "Add Sources", "required" => false, "mapped" => false])
             ->add('submit', SubmitType::class, ["label" => "Post"])

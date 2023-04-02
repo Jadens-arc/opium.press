@@ -67,6 +67,7 @@ class CapsuleController extends AbstractController
                     $request->get("replying-to")
                 );
                 $post->setReply($reply);
+                $form['reply']->setData($reply->getId());
                 $data['replying-to'] = $reply;
             }
         }
@@ -76,7 +77,7 @@ class CapsuleController extends AbstractController
             $em = $doctrine->getManager();
             $userData = $em->find(User::class, $user->getId());
             $formData = $form->getData();
-            if (!$request->query->get("isDraft")) {
+            if (!$formData['isDraft']) {
                 if (in_array("ROLE_ADMIN", $user->getRoles())) {
                     $post->setCreationDateAdmin();
                 } else {
@@ -103,16 +104,16 @@ class CapsuleController extends AbstractController
             if (strlen(trim($sourceInput)) > 0) {
                 $post->setSources(explode(",", $sourceInput));
             }
+            if ($formData['reply'])
+                $post->setReply($em->getRepository(Post::class)->find($formData['reply']));
 
-
-            if ($request->query->get("isDraft")) {
+            if ($formData['isDraft']) {
                 $post->setTitle($formData['title']);
                 $post->setContent($formData['content']);
                 $em->merge($post);
                 $em->flush();
                 return $this->redirectToRoute('app_drafts');
             } else {
-
                 $post->setTitle($form['title']->getData());
                 $post->setContent($form['content']->getData());
                 $em->persist($post);

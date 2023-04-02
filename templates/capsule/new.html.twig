@@ -49,11 +49,13 @@
             {{ form_widget(form.content, {'attr': {'class': 'form-control', 'rows': '10'}}) }}
         </div>
 
+        {{ form_row(form.isDraft) }}
+        {{ form_row(form.reply) }}
         {{ form_row(form._token) }}
         <div class="d-flex justify-content-between mb-5">
             <div class="">
                 {{ form_widget(form.submit, {'attr': {'class': 'btn btn-primary'}}) }}
-                <button id="saveToDrafts" class="btn btn-secondary" formaction="{{ path('app_new_capsule', {id: "new"}) }}?isDraft=true">Save to Drafts</button>
+                <button id="saveToDrafts" class="btn btn-secondary">Save to Drafts</button>
             </div>
             <a class="btn btn-outline-secondary" href="{{ url('app_view_capsule', {id: 91}) }}">Learn more</a>
         </div>
@@ -62,7 +64,11 @@
 
 {% block javascripts %}
     <script defer>
-
+        let saveToDrafts = document.getElementById('saveToDrafts');
+        let post_isDraft = document.getElementById('post_isDraft');
+        saveToDrafts.addEventListener('click', () => {
+            post_isDraft.value = true;
+        });
 
         let post_content = document.getElementById('post_content');
         post_content.addEventListener('keyup', () => {
