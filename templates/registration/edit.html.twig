@@ -15,15 +15,6 @@
         <label class="label">{{ form_label(registrationForm.display_name) }}</label>
         {{ form_widget(registrationForm.display_name, {'attr': {'class': 'form-control mb-3'}}) }}
 
-        <label class="label">Current Password</label>
-        {{ form_widget(registrationForm.plainPassword,  {'attr': {'class': 'form-control mb-3'}}) }}
-
-        <label class="label" for="">Change Password</label>
-        <input class="form-check" id="changedPassword" type="checkbox">
-
-        <label class="label" for="newPassword">New Password:</label>
-        {{ form_widget(registrationForm.newPassword,  {'attr': {'class': 'form-control mb-3', 'disabled': true}}) }}
-
         <button type="submit" class="btn btn-primary">Change</button>
     {{ form_end(registrationForm) }}
 

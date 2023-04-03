@@ -50,7 +50,7 @@ class RegistrationController extends AbstractController
         ]);
     }
 
-    #[Route('/editUser', name: 'app_edit_user')]
+    #[Route('/writer/edit', name: 'app_edit_account')]
     public function edit(Request $request,
                          UserPasswordHasherInterface $userPasswordHasher,
                          EntityManagerInterface $entityManager,

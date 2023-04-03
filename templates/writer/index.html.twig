@@ -14,7 +14,7 @@
         <div class="col-sm d-flex justify-content-end align-items-center ">
             {% if app.user and app.user.username == writer.username %}
                 {# <a class="btn btn-primary m-2" href="{{ path('app_saved') }}" style="height: fit-ontent">Saved</a> #}
-                <a class="btn btn-primary m-2" href="{{ path('app_settings') }}" style="height: fit-content">Settings</a>
+                <a class="btn btn-primary m-2" href="{{ path('app_edit_account') }}" style="height: fit-content">Edit Account</a>
                 <a class="btn btn-danger m-2" href="{{ path('app_logout') }}" style="height: fit-content">Logout</a>
             {% else %}
                 {% if app.user %}
