@@ -7,7 +7,6 @@
             <h1 class="h1">{{ writer.displayName }}</h1>
             <h4>
                 <span class="h4 fw-bold">@{{ writer.username }}</span>
-                <span> ● </span>
                 <span class="h4 fw-light">{{ writer.subscribers.count }} Subscriber{{ (writer.subscribers.count == 1) ? '' : 's' }}</span>
             </h4>
             <h5 style="white-space: pre-wrap"
