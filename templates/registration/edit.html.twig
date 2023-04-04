@@ -4,24 +4,22 @@
 {% block content %}
     <h1 class="h3 mb-3 font-weight-normal">Editing @{{ app.user.username }}</h1>
 
-
-    {{ form_start(registrationForm) }}
+    {{ form_start(form) }}
         <p>
-            {{ form_errors(registrationForm) }}
+            {{ form_errors(form) }}
         </p>
-        <label class="label">{{ form_label(registrationForm.email) }}</label>
-        {{ form_widget(registrationForm.email, {'attr': {'class': 'form-control mb-3'}}) }}
+        <label class="label">{{ form_label(form.email) }}</label>
+        {{ form_widget(form.email, {'attr': {
+            'class': 'form-control mb-3', 'value': user.email, 'placeholder': user.email}}) }}
 
-        <label class="label">{{ form_label(registrationForm.display_name) }}</label>
-        {{ form_widget(registrationForm.display_name, {'attr': {'class': 'form-control mb-3'}}) }}
+        <label class="label">{{ form_label(form.display_name) }}</label>
+        {{ form_widget(form.display_name, {'attr': {
+            'class': 'form-control mb-3', 'value': user.displayName, 'placeholder': user.displayName}}) }}
+
+        <label class="label">{{ form_label(form.bio) }}</label>
+        {{ form_widget(form.bio, {'attr': {
+            'class': 'form-control mb-3', 'value': user.bio, 'placeholder': user.bio}}) }}
 
         <button type="submit" class="btn btn-primary">Change</button>
-    {{ form_end(registrationForm) }}
-
-    <script>
-        document.getElementById('changedPassword').onchange = function() {
-            document.getElementById('edit_user_form_newPassword').disabled = !this.checked;
-            document.getElementById('edit_user_form_newPassword').value = null;
-        };
-    </script>
+    {{ form_end(form) }}
 {% endblock %}
