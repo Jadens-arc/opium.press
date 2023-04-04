@@ -69,9 +69,9 @@
     <div class="card-body">
         <h5 class="card-title">{{ post.title }}</h5>
         <div class="card-text">
-            <p id="{{ post.id }}-content" class="card-content ">
-                {{ post.content|nl2br }}
-            </p>
+            <p id="{{ post.id }}-content" class="card-content "
+               style="white-space: pre"
+            >{{ post.content}}</p>
         </div>
     </div>
     {% if post.sources %}
