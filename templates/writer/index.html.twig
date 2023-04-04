@@ -10,9 +10,8 @@
                 <span> ● </span>
                 <span class="h4 fw-light">{{ writer.subscribers.count }} Subscriber{{ (writer.subscribers.count == 1) ? '' : 's' }}</span>
             </h4>
-            {% if writer.bio %}
-                <h5>{{ writer.bio }}</h5>
-            {% endif %}
+            <h5 style="white-space: pre-wrap"
+            >{{ writer.bio }}</h5>
         </div>
         <div class="col-sm d-flex justify-content-end align-items-center ">
             {% if app.user and app.user.username == writer.username %}
