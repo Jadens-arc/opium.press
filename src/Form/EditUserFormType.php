@@ -22,7 +22,7 @@ class EditUserFormType extends AbstractType
         $builder
             ->add('email', EmailType::class)
             ->add('display_name', TextType::class)
-            ->add('bio', TextareaType::class)
+            ->add('bio', TextareaType::class, ['required' => false])
         ;
     }
 
