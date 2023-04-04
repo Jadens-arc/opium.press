@@ -57,7 +57,7 @@ class RegistrationController extends AbstractController
 
         $form = $this->createForm(EditUserFormType::class);
 
-        $form->handleRequest($request, $user);
+        $form->handleRequest($request);
 
         if ($form->isSubmitted()) {
             $user->setEmail($form['email']->getData());
