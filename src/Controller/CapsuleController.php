@@ -151,6 +151,31 @@ class CapsuleController extends AbstractController
         return $this->redirectToRoute('app_homepage');
     }
 
+    #[Route('/capsule/revert/{id}', name: 'app_revert_capsule')]
+    public function revert(Request $request, ManagerRegistry $doctrine, UserInterface $user, $id): Response
+    {
+        $em = $doctrine->getManager();
+        /**
+         * @var Post $post
+         */
+        $post = $doctrine->getRepository(Post::class)->find($id);
+        if (!$post)
+            return $this->redirectToRoute('app_homepage', ['message' => "Post not Found", 'type' => 'danger']);
+        if ($user !== $post->getCreator()) {
+            return $this->redirectToRoute('app_homepage', ['message' => "Not your post", 'type' => 'danger']);
+        }
+        if ($post->isInEmbargo() || in_array("ROLE_ADMIN", $user->getRoles())) {
+            $post->setCreationDate(NULL);
+            $em->persist($post);
+            $em->flush();
+            if (!$post->getCreationDate()) {
+                return $this->redirectToRoute('app_drafts');
+            }
+            return $this->redirectToRoute('app_drafts');
+        }
+        return $this->redirectToRoute('app_homepage');
+    }
+
     #[Route('/capsule/post_draft/{id}', name: 'app_capsule_post_draft')]
     public function postDraft(Request $request, ManagerRegistry $doctrine, UserInterface $user, $id): Response {
         $em = $doctrine->getManager();

@@ -99,9 +99,9 @@ class Post
         return ($this->creationDate > $currentDate);
     }
 
-    public function setCreationDate(): self
+    public function setCreationDate(?\Datetime $datetime = new \DateTime("now")): self
     {
-        $this->creationDate = new \DateTime("now");
+        $this->creationDate = $datetime;
 
 
         return $this;
