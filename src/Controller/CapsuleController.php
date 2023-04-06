@@ -22,7 +22,7 @@ class CapsuleController extends AbstractController
     public function share(Request $request, ManagerRegistry $doctrine, ImageGenerator $imageGenerator, $id): Response
     {
         $post = $doctrine->getRepository(Post::class)->find($id);
-        $filepath = $imageGenerator->generateStory($post);
+        $filepath = $imageGenerator->capsuleStory($post);
         return $this->render('capsule/share.html.twig', [
             'src' => $filepath,
             'url' => $this->generateUrl('app_view_capsule', ['id' => $id], UrlGenerator::ABSOLUTE_URL)

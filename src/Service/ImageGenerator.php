@@ -16,7 +16,7 @@ class ImageGenerator
         $this->path = realpath('.') . '/shares/';
     }
 
-    public function generateStory(Post $post):string
+    public function capsuleStory(Post $post):string
     {
         $im = imagecreate(1080, 1920);
         $bg = imagecolorallocate($im, 31, 32, 47);
