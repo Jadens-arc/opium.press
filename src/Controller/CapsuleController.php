@@ -27,19 +27,6 @@ class CapsuleController extends AbstractController
             'src' => $filepath,
             'url' => $this->generateUrl('app_view_capsule', ['id' => $id], UrlGenerator::ABSOLUTE_URL)
         ]);
-//        $pattern = "/[^_a-z0-9- ]/i";
-//        $title = preg_replace($pattern,'', $post->getTitle());
-//        $content = preg_replace($pattern,'', $post->getContent());
-//        $filename = $post->getCreator()->getId() . "-" . $post->getId(). ".png";
-//        $output = "hi";
-//        $code = null;
-//        $command = exec(
-//            "python3 /home/jaden/Opium-Scripts/main.py \"$filename\" \"$title\" \"$content\" 2>&1",
-//            $output,
-//            $code
-//        );
-//        return $this->render('capsule/share.html.twig',
-//            ['post' => $filename, 'url' => $this->generateUrl("app_view_capsule", ["id" => $id], UrlGenerator::ABSOLUTE_URL) ]);
     }
 
     #[Route('/capsule/edit/{id}', name: 'app_new_capsule')]
