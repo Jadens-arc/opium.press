@@ -13,6 +13,10 @@
             >{{ writer.bio }}</h5>
         </div>
         <div class="col-sm d-flex justify-content-end align-items-center ">
+            <a class="btn btn-primary m-2" href="{{ path('app_share_writer', {'username': writer.username}) }}" style="height: fit-content;">
+                <img class="icon" src="{{ asset('/brands/instagram.svg') }}" alt="Instagram" style="margin-right:5px; width: 1rem;">
+                <span>Share</span>
+            </a>
             {% if app.user and app.user.username == writer.username %}
                 {# <a class="btn btn-primary m-2" href="{{ path('app_saved') }}" style="height: fit-ontent">Saved</a> #}
                 <a class="btn btn-primary m-2" href="{{ path('app_edit_account') }}" style="height: fit-content">Edit Account</a>

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Post;
 use App\Entity\User;
+use App\Service\ImageGenerator;
 use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
@@ -12,6 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 
@@ -48,6 +50,17 @@ class WriterController extends AbstractController
             'pager' => $pagerfanta,
             'writer' => $writer
         ]);
+    }
+
+    #[Route('/writer/share/{username}', name: "app_share_writer")]
+    public function share(Request $request, ManagerRegistry $doctrine, UserInterface $user, ImageGenerator $imageGenerator, $username): Response {
+        $user = $doctrine->getRepository(User::class)->findOneBy(['username' => $username]);
+        $filepath = $imageGenerator->writerStory($user);
+        return $this->render('capsule/share.html.twig', [
+            'src' => $filepath,
+            'url' => $this->generateUrl('app_writer', ['username' => $username], UrlGenerator::ABSOLUTE_URL)
+        ]);
+
     }
 
     #[Route('/drafts', name: "app_drafts")]
