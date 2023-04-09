@@ -40,9 +40,13 @@ class Post
     #[ORM\OneToMany(mappedBy: 'reply', targetEntity: self::class)]
     private Collection $replies;
 
+    #[ORM\OneToMany(mappedBy: 'post', targetEntity: Save::class, orphanRemoval: true)]
+    private Collection $saves;
+
     public function __construct()
     {
         $this->replies = new ArrayCollection();
+        $this->saves = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -174,6 +178,36 @@ class Post
             // set the owning side to null (unless already changed)
             if ($reply->getReply() === $this) {
                 $reply->setReply(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Save>
+     */
+    public function getSaves(): Collection
+    {
+        return $this->saves;
+    }
+
+    public function addSave(Save $save): self
+    {
+        if (!$this->saves->contains($save)) {
+            $this->saves->add($save);
+            $save->setPost($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSave(Save $save): self
+    {
+        if ($this->saves->removeElement($save)) {
+            // set the owning side to null (unless already changed)
+            if ($save->getPost() === $this) {
+                $save->setPost(null);
             }
         }
 

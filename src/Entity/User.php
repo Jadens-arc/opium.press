@@ -55,11 +55,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $bio = null;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Save::class)]
+    private Collection $saves;
+
     public function __construct()
     {
         $this->posts = new ArrayCollection();
         $this->subscriptions = new ArrayCollection();
         $this->subscribers = new ArrayCollection();
+        $this->saves = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -245,6 +249,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setBio(?string $bio): self
     {
         $this->bio = $bio;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Save>
+     */
+    public function getSaves(): Collection
+    {
+        return $this->saves;
+    }
+
+    public function addSave(Save $save): self
+    {
+        if (!$this->saves->contains($save)) {
+            $this->saves->add($save);
+            $save->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSave(Save $save): self
+    {
+        if ($this->saves->removeElement($save)) {
+            // set the owning side to null (unless already changed)
+            if ($save->getUser() === $this) {
+                $save->setUser(null);
+            }
+        }
 
         return $this;
     }
