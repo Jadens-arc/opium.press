@@ -52,9 +52,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: self::class, mappedBy: 'subscriptions')]
     private Collection $subscribers;
 
-    #[ORM\ManyToMany(targetEntity: Post::class)]
-    private Collection $saves;
-
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $bio = null;
 
@@ -63,7 +60,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->posts = new ArrayCollection();
         $this->subscriptions = new ArrayCollection();
         $this->subscribers = new ArrayCollection();
-        $this->saves = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -237,30 +233,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         if ($this->subscribers->removeElement($subscriber)) {
             $subscriber->removeSubscription($this);
         }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Post>
-     */
-    public function getSaves(): Collection
-    {
-        return $this->saves;
-    }
-
-    public function addSave(Post $save): self
-    {
-        if (!$this->saves->contains($save)) {
-            $this->saves->add($save);
-        }
-
-        return $this;
-    }
-
-    public function removeSave(Post $save): self
-    {
-        $this->saves->removeElement($save);
 
         return $this;
     }
