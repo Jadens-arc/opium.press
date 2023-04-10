@@ -3,7 +3,7 @@
         style="cursor: pointer;"
         onclick="window.location='{{ path('app_view_capsule', {'id': post.id}) }}'">
         <div class="col-sm d-flex flex-row" style="flex-grow: 1">
-            {% if (app.user and is_granted('ROLE_ADMIN')) or not post.creationDate or ("-3 days"|date("Y-m-d H:i:s") < post.creationDate.format('Y-m-d H:i:s'))  %}
+            {% if (app.user and is_granted('ROLE_ADMIN')) or not post.creationDate or post.isInEmbargo %}
                 <a
                         href="{{ path('app_delete_capsule', {'id': post.id}) }}"
                         onclick="return confirm('Are you sure you want to delete this');"
@@ -11,7 +11,7 @@
                     <img class="icon" alt="Trash can" src="{{ asset('regular/trash-can.svg') }}" style="margin-right:20px; width: 1rem;">
                 </a>
             {% endif %}
-            {% if (post.creationDate and "-3 days"|date("Y-m-d H:i:s") < post.creationDate.format('Y-m-d H:i:s')) %}
+            {% if (post.creationDate and post.isInEmbargo) %}
                 <a
                         href="{{ path('app_revert_capsule', {'id': post.id}) }}"
                         onclick="return confirm('Are you sure you want to send this capsule back to drafts (it will reset the embargo)');"
@@ -28,29 +28,26 @@
                     <img class="icon" alt="share" src="{{ asset('regular/pen-to-square.svg') }}" style="margin-right:20px; width: 1rem;">
                 </a>
             {% endif %}
-            {% if app.user and post.creationDate and ("-3 days"|date("Y-m-d H:i:s") > post.creationDate.format("Y-m-d H:i:s")) %}
+            {% if app.user and post.creationDate and not post.isInEmbargo  %}
                 <a href="{{ path('app_new_capsule', {'id': 'new', 'replying-to': post.id}) }}">
                     <img class="icon" alt="Reply" src="{{ asset('regular/share-from-square.svg') }}" style="margin-right: 20px; width: 1rem;">
                 </a>
+            {% endif %}
+            {% if app.user %}
+                {% if post in app.user.getSavedPosts %}
+                    <a href="{{ path('app_save', {'id': post.id}) }}">
+                        <img class="icon" src="{{ asset('solid/bookmark.svg') }}" style="margin-right:20px; width: 0.8rem;" alt="">
+                    </a>
+                {% else %}
+                    <a href="{{ path('app_save', {'id': post.id}) }}">
+                        <img class="icon" src="{{ asset('regular/bookmark.svg') }}" style="margin-right:20px; width: 0.8rem;" alt="">
+                    </a>
+                {% endif %}
             {% endif %}
             <a href="{{ path('app_writer', {"username": post.creator.username}) }}"
                 style="text-decoration:none;" class="d-block text-capitalize text-muted">{{ post.creator.displayName }}</a>
             <a href="{{ path('app_writer', {"username": post.creator.username}) }}"
                 class="d-block mx-2 fw-light text-muted">@{{ post.creator.username }}</a>
-        </div>
-        <div class="col-sm d-flex flex-row justify-content-end">
-            {# {% if app.user %}
-                {% if post.id in saved %}
-                    <a href="{{ path('app_save', {'id': post.id}) }}">
-                        <img src="{{ asset('regular/bookmark.svg') }}" style="margin-left:20px; width: 0.8rem;" alt="">
-                    </a>
-                {% else %}
-                    <a href="{{ path('app_save', {'id': post.id}) }}">
-                        <img src="{{ asset('solid/bookmark.svg') }}" style="margin-left:20px; width: 0.8rem;" alt="">
-                    </a>
-                {% endif %}
-            {% endif %} #}
-
         </div>
     </h6>
     {% if post.creationDate or post.tags or post.reply%}

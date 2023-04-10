@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use Container1vwxooY\getRedirectControllerService;
 use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
@@ -15,7 +14,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use App\Entity\Post;
 use App\Entity\User;
 
-class UserFavoritesController extends AbstractController
+class SubcribeController extends AbstractController
 {
 
     #[Route('/subscriptions', name: 'app_subscriptions')]
@@ -43,7 +42,7 @@ class UserFavoritesController extends AbstractController
             $pagerfanta->setCurrentPage($_GET["page"]);
         }
 
-        return $this->render('user_favorites/subscriptions.html.twig', [
+        return $this->render('subscriptions/subscriptions.html.twig', [
             "title" => "Subscriptions",
             "posts" => $pagerfanta->getCurrentPageResults(),
             "pager" => $pagerfanta,
@@ -72,55 +71,5 @@ class UserFavoritesController extends AbstractController
         $em->persist($user);
         $em->flush();
         return $this->redirectToRoute('app_writer', ["username" => $username]);
-    }
-
-
-    #[Route('/saved', name: 'app_saved')]
-    public function saved(Request $request, ManagerRegistry $doctrine, UserInterface $user): Response
-    {
-        $currentDate = new DateTime();
-        $currentDate->modify("-2 day");
-        $currentDate = $currentDate->format('Y-m-d H:i:s');
-
-        $em = $doctrine->getManager();
-        $id = $user->getId();
-
-        $saved = $em
-            ->createQuery("SELECT u.saved FROM App\Entity\User u WHERE u.id=$id")
-            ->getResult();
-
-        if (count($saved[0]["saved"]) == 0) {
-            return $this->render('homepage/index.html.twig', ["title" => "Saved", "posts"=>[]]);
-        }
-
-        $savedString = json_encode($saved[0]["saved"]);
-        $savedString = str_replace("[", "( ", $savedString);
-        $savedString = str_replace("]", " )", $savedString);
-        $savedString = str_replace('"', "'", $savedString);
-
-        $query = "SELECT p FROM App\Entity\Post p WHERE p.creationDate < '$currentDate' AND p.id IN $savedString";
-        $querySort = "ORDER BY p.creationDate DESC ";
-        $query .= $querySort;
-        $posts = $em
-            ->createQuery($query)
-            ->getResult();
-
-
-        return $this->render('homepage/index.html.twig', ["title" => "Saved", "posts"=>$posts]);
-    }
-
-    #[Route('/save/{id}', name: 'app_save')]
-    public function save(Request $request, ManagerRegistry $doctrine, UserInterface $user, $id): Response
-    {
-        $saved = $user->getSaved();
-        if (in_array($id, $saved)) {
-            return $this->redirect($request->headers->get('referer'));
-        }
-        array_push($saved, $id);
-        $user->setSaved($saved);
-        $em = $doctrine->getManager();
-        $em->persist($user);
-        $em->flush();
-        return $this->redirect($request->headers->get('referer'));
     }
 }

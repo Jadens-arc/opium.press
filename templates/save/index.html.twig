@@ -1,0 +1,13 @@
+{% extends "base.html.twig" %}
+
+{% block title %}| Subscriptions{% endblock %}
+
+{% block content %}
+<h1>{{ title }}</h1>
+{% include 'capsules.html.twig' %}
+<div class="m-4">
+    {% if posts|length > 0 %}
+    {{ pagerfanta(pager) }}
+    {% endif %}
+</div>
+{% endblock %}

@@ -261,6 +261,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->saves;
     }
 
+    /**
+     * @return array
+     */
+    public function getSavedPosts(): array
+    {
+        $posts = [];
+        foreach($this->saves as $save) {
+            $posts[] = $save->getPost();
+        }
+        return $posts;
+    }
+
     public function addSave(Save $save): self
     {
         if (!$this->saves->contains($save)) {

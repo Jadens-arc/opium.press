@@ -35,9 +35,10 @@ class Save
         return $this->creationDate;
     }
 
-    public function setCreationDate(\DateTimeInterface $creationDate): self
+    public function setCreationDate(?\Datetime $datetime = new \DateTime("now")): self
     {
-        $this->creationDate = $creationDate;
+        $this->creationDate = $datetime;
+
 
         return $this;
     }
