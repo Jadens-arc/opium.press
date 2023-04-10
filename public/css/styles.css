@@ -75,13 +75,13 @@ html {
     border: 0 solid rgba(255,255,255,0.14);
     /*filter:  drop-shadow(0px 0px 0px rgba(0,0,0,0));*/
 
-    -webkit-animation: story-fade-in 1s;
-    -moz-animation: story-fade-in 1s;
-    -ms-animation: story-fade-in 1s;
+    -webkit-animation: story-fade-in 2.1s;
+    -moz-animation: story-fade-in 2.1s;
+    -ms-animation: story-fade-in 2.1s;
 
-    -webkit-animation-duration: 1s;
-    -moz-animation-duration: 1s;
-    -ms-animation-duration: 1s;
+    -webkit-animation-duration: 2.1s;
+    -moz-animation-duration: 2.1s;
+    -ms-animation-duration: 2.1s;
 
     -webkit-animation-delay: 1s;
     -moz-animation-delay: 1s;
@@ -97,6 +97,13 @@ html {
 
 @keyframes story-fade-in {
     0% {
+        opacity: 0;
+        transform: scale(0.95);
+        border: 0 solid rgba(255,255,255,0);
+        box-shadow: 0 0 0 rgba(0,0,0,0);
+    }
+    50% {
+        opacity: 1;
         transform: scale(0.95);
         border: 0 solid rgba(255,255,255,0);
         box-shadow: 0 0 0 rgba(0,0,0,0);
