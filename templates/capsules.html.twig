@@ -1,4 +1,4 @@
-{% if not posts and app.request.query.get('q') %}
+{% if posts|length == 0 and app.request.query.get('q') %}
     <h2 class="text-center text-muted">Nothing found for {{  app.request.query.get('q') }}</h2>
     <div class="text-center">
         <a href="/" class="btn btn-primary">Go Back</a>

@@ -34,7 +34,7 @@
 
     </div>
     <hr>
-    {% if not posts %}
+    {% if posts|length == 0 %}
         {% if app.user and app.user.username == writer.username %}
             <h3 class="text-muted text-center">No Capsules:( Why don't you write something</h3>
         {% else %}
