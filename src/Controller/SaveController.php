@@ -71,6 +71,6 @@ class SaveController extends AbstractController
         $em->remove($save);
         $em->flush();
 
-        return $this->redirectToRoute("app_homepage");
+        return $this->redirectToRoute("app_saves");
     }
 }
