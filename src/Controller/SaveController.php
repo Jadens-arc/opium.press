@@ -51,6 +51,9 @@ class SaveController extends AbstractController
     public function save(UrlGeneratorInterface $urlGenerator, UserInterface $user, ManagerRegistry $doctrine, $id): Response
     {
         /** @var User $user */
+        $post = $doctrine->getRepository(Post::class)->find($id);
+        if (in_array($post, $user->getSavedPosts()))
+            return $this->redirectToRoute('app_saves', [], 302, "#" . $id);
         $newSave = new Save();
         $newSave->setCreationDate();
         $newSave->setUser($user);
@@ -68,8 +71,10 @@ class SaveController extends AbstractController
     {
         $em = $doctrine->getManager();
         $save = $doctrine->getRepository(Save::class)->findOneBy(["post" => $id, "user" => $user->getId()]);
-        $em->remove($save);
-        $em->flush();
+        if ($save) {
+            $em->remove($save);
+            $em->flush();
+        }
 
         return $this->redirectToRoute("app_saves");
     }
