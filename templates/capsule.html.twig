@@ -21,11 +21,11 @@
             {% endif %}
             {% if post.creationDate %}
                 <a href="{{ path('app_share_capsule', {'id': post.id}) }}">
-                  <img class="icon" alt="Instagram Logo" src="{{ asset('brands/instagram.svg') }}" style="margin-right:20px; width: 1rem;">
+                    <img id="save-{{ post.id }}" class="icon" alt="Instagram Logo" src="{{ asset('brands/instagram.svg') }}" style="margin-right:20px; width: 1rem;">
                 </a>
             {% else %}
                 <a href="{{ path('app_new_capsule', {'id': post.id}) }}">
-                    <img class="icon" alt="share" src="{{ asset('regular/pen-to-square.svg') }}" style="margin-right:20px; width: 1rem;">
+                    <img id="save-{{ post.id }}" class="icon" alt="share" src="{{ asset('regular/pen-to-square.svg') }}" style="margin-right:20px; width: 1rem;">
                 </a>
             {% endif %}
             {% if app.user and post.creationDate and not post.isInEmbargo  %}
@@ -33,17 +33,17 @@
                     <img class="icon" alt="Reply" src="{{ asset('regular/share-from-square.svg') }}" style="margin-right: 20px; width: 1rem;">
                 </a>
             {% endif %}
-{#            {% if app.user %}#}
-{#                {% if post in app.user.getSavedPosts %}#}
-{#                    <a href="{{ path('app_unsave', {'id': post.id}) }}">#}
-{#                        <img class="icon" src="{{ asset('solid/bookmark.svg') }}" style="margin-right:20px; width: 0.8rem;" alt="">#}
-{#                    </a>#}
-{#                {% else %}#}
-{#                    <a href="{{ path('app_save', {'id': post.id}) }}">#}
-{#                        <img class="icon" src="{{ asset('regular/bookmark.svg') }}" style="margin-right:20px; width: 0.8rem;" alt="">#}
-{#                    </a>#}
-{#                {% endif %}#}
-{#            {% endif %}#}
+            {% if app.user %}
+                {% if post in app.user.getSavedPosts %}
+                    <a href="{{ path('app_unsave', {'id': post.id}) }}">
+                        <img class="icon" src="{{ asset('solid/bookmark.svg') }}" style="margin-right:20px; width: 0.8rem;" alt="">
+                    </a>
+                {% else %}
+                    <a href="{{ path('app_save', {'id': post.id}) }}">
+                        <img class="icon" src="{{ asset('regular/bookmark.svg') }}" style="margin-right:20px; width: 0.8rem;" alt="">
+                    </a>
+                {% endif %}
+            {% endif %}
             <a href="{{ path('app_writer', {"username": post.creator.username}) }}"
                 style="text-decoration:none;" class="d-block text-capitalize text-muted">{{ post.creator.displayName }}</a>
             <a href="{{ path('app_writer', {"username": post.creator.username}) }}"

@@ -6,12 +6,14 @@ use App\Entity\Post;
 use App\Entity\Save;
 use App\Entity\User;
 use Doctrine\ORM\Query\Expr\Join;
+use http\Env\Request;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class SaveController extends AbstractController
@@ -46,7 +48,7 @@ class SaveController extends AbstractController
         ]);
     }
     #[Route('/save/{id}', name: 'app_save')]
-    public function save(UserInterface $user, ManagerRegistry $doctrine, $id): Response
+    public function save(UrlGeneratorInterface $urlGenerator, UserInterface $user, ManagerRegistry $doctrine, $id): Response
     {
         /** @var User $user */
         $newSave = new Save();
@@ -59,5 +61,16 @@ class SaveController extends AbstractController
         $doctrine->getManager()->flush();
 
         return $this->redirectToRoute("app_saves");
+    }
+
+    #[Route('/unsave/{id}', name: 'app_unsave')]
+    public function unsave(UserInterface $user, ManagerRegistry $doctrine, $id): Response
+    {
+        $em = $doctrine->getManager();
+        $save = $doctrine->getRepository(Save::class)->findOneBy(["post" => $id, "user" => $user->getId()]);
+        $em->remove($save);
+        $em->flush();
+
+        return $this->redirectToRoute("app_homepage");
     }
 }
