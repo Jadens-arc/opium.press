@@ -1,13 +1,16 @@
 {% extends "base.html.twig" %}
 
-{% block title %}| Subscriptions{% endblock %}
+{% block title %}| Saves{% endblock %}
 
 {% block content %}
-<h1>{{ title }}</h1>
-{% include 'capsules.html.twig' %}
-<div class="m-4">
-    {% if posts|length > 0 %}
-    {{ pagerfanta(pager) }}
+    <h1>{{ title }}</h1>
+    {% if posts|length == 0 %}
+        <h3 class="text-muted text-center">You can save a capsule by clicking the bookmark icon</h3>
     {% endif %}
-</div>
+    {% include 'capsules.html.twig' %}
+    <div class="m-4">
+        {% if posts|length > 0 %}
+        {{ pagerfanta(pager) }}
+        {% endif %}
+    </div>
 {% endblock %}
