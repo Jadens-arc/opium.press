@@ -94,13 +94,34 @@ class Post
     {
         return $this->creationDate;
     }
-    
+
     public function isInEmbargo(): bool
     {
         $currentDate = new \DateTime();
         $currentDate->modify("-3 day");
 
         return ($this->creationDate > $currentDate);
+    }
+
+    public function timeUntilPublic(): string
+    {
+        /** @var \DateTime $publicDate */
+        $publicDate = clone $this->creationDate;
+        $publicDate->modify("+3 day");
+        $currentDate = new \DateTime();
+        $difference = $publicDate->diff($currentDate);
+
+        return $difference->format("%d days and %h hours");
+    }
+
+    public function percentUntilPublic(): float
+    {
+        /** @var \DateTime $publicDate */
+        $publicDate = clone $this->creationDate;
+        $publicDate->modify("+3 day");
+        $currentDate = new \DateTime();
+        $difference = $publicDate->diff($currentDate);
+        return 1 - ((($difference->format('%a') * 1440) + ($difference->format('%h') * 60) + $difference->format('%i')) / 4320);
     }
 
     public function setCreationDate(?\Datetime $datetime = new \DateTime("now")): self

@@ -130,3 +130,12 @@ html {
 .collapsed {
     max-height: 16rem;
 }
+
+.progress {
+    background-color: #1d1e2a;
+    border: 1px solid #13131c;
+}
+
+.progress-bar {
+    background-color: var(--bs-body-color);
+}

@@ -52,9 +52,16 @@
     </h6>
     {% if post.creationDate or post.tags or post.reply%}
         <div class="m-2">
-            {% if post.creationDate %}
-                <span class="d-block text-muted">{{ post.creationDate | format_datetime(locale='en', pattern="MMMM dd, yyyy 'at' h:m a", timezone='America/Los_Angeles') }}</span>
-            {% endif %}
+            <span class="d-block">
+                {% if post.creationDate %}
+                    <span class="text-muted">{{ post.creationDate | format_datetime(locale='en', pattern="MMMM dd, yyyy 'at' h:m a", timezone='America/Los_Angeles') }}</span>
+                {% endif %}
+                {% if post.isInEmbargo %}
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" style="width: {{ post.percentUntilPublic * 10 }}%" aria-valuenow="{{ post.percentUntilPublic }}" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                {% endif %}
+            </span>
             {% for tag in post.tags %}
                 <a href="{{ path('app_homepage', {'q': '#' ~ tag}) }}"  style="text-decoration: none;" class="badge text-bg-primary mx-1">#{{ tag }}</a>
             {% endfor %}
