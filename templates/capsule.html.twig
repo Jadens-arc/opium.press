@@ -57,7 +57,7 @@
                     <span class="text-muted">{{ post.creationDate | format_datetime(locale='en', pattern="MMMM dd, yyyy 'at' h:m a", timezone='America/Los_Angeles') }}</span>
                 {% endif %}
                 {% if post.isInEmbargo %}
-                    <div class="progress">
+                    <div class="progress {{ (post.tags) ? "my-2" }}">
                         <div class="progress-bar" role="progressbar" style="width: {{ post.percentUntilPublic * 10 }}%" aria-valuenow="{{ post.percentUntilPublic }}" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                 {% endif %}
