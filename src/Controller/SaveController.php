@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Post;
 use App\Entity\Save;
 use App\Entity\User;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Query\Expr\Join;
 use http\Env\Request;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
@@ -24,17 +25,30 @@ class SaveController extends AbstractController
         /** @var User $user */
         $em = $doctrine->getManager();
 
-
-        $repo = $em->getRepository(Post::class);
-        $qb = $repo->createQueryBuilder('p')
-            ->where('p.creator = :creator')
+        /** @var array $saves */
+        $saves = $em->getRepository(Save::class)
+            ->createQueryBuilder('s')
+            ->select('s')
+            ->where('s.user = :creator')
             ->setParameter('creator', $user)
-            ->innerJoin("p.saves", "s", Join::WITH, "s.user = :user")
-            ->setParameter("user", $user)
-            ->orderBy("s.creationDate", "desc")
-            ->getQuery();
+            ->orderBy('s.creationDate', 'desc')
+            ->getQuery()
+            ->getResult()
+        ;
 
-        $adapter = new QueryAdapter($qb);
+        $saveIds = [];
+
+        foreach($saves as $save) {
+            /** @var Save $save */
+            $saveIds[] = $save->getPost()->getId();
+        }
+
+        $posts = $em->getRepository(Post::class)
+            ->createQueryBuilder('p')
+            ->where('p in (:saves)')
+            ->setParameter('saves', $saveIds);
+
+        $adapter = new QueryAdapter($posts);
         $pagerfanta = new Pagerfanta($adapter);
 
         if (isset($_GET["page"])) {
