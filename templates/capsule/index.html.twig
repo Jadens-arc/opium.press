@@ -6,7 +6,7 @@
     <div class="card-header row mb-2">
         <div class="row" style="flex-grow: 1">
             <div class="col-auto d-flex flex-row" style="width: fit-content">
-                <a href="/capsule/share/{{ post.id }}">
+                <a href="/capsule/share/{{ post.uuid}}">
                     <img src="/brands/instagram.svg" class="icon mx-2" style="width: 1rem;" alt="">
                 </a>
                 <span class="d-block mx-2 fw-bold text-capitalize">{{ post.creator.displayName }}</span>
@@ -36,7 +36,7 @@
         <a class="m-2" href="{{ path('app_view_capsule', {'id': post.reply.id}) }}">Replying to {{ post.reply.title }}</a>
     {% endif %}
     <h5 class="h1">{{ post.title }}</h5>
-    <p id="{{ post.id }}-content" class="card-content "
+    <p id="{{ post.uuid }}-content" class="card-content "
        style="white-space: pre-wrap"
     >{{ post.content}}</p>
     {% if post.sources %}

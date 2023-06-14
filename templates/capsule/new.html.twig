@@ -57,7 +57,7 @@
                 {{ form_widget(form.submit, {'attr': {'class': 'btn btn-primary'}}) }}
                 <button id="saveToDrafts" class="btn btn-secondary">Save to Drafts</button>
             </div>
-            <a class="btn btn-outline-secondary" href="{{ url('app_view_capsule', {id: 91}) }}">Learn more</a>
+            <a class="btn btn-outline-secondary" href="{{ url('app_view_capsule', {uuid: 91}) }}">Learn more</a>
         </div>
     {{ form_end(form, {render_rest: false}) }}
 {% endblock %}

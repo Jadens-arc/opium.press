@@ -61,17 +61,17 @@ class SaveController extends AbstractController
             "pager" => $pagerfanta,
         ]);
     }
-    #[Route('/save/{id}', name: 'app_save')]
-    public function save(UrlGeneratorInterface $urlGenerator, UserInterface $user, ManagerRegistry $doctrine, $id): Response
+    #[Route('/save/{uuid}', name: 'app_save')]
+    public function save(UrlGeneratorInterface $urlGenerator, UserInterface $user, ManagerRegistry $doctrine, $uuid): Response
     {
         /** @var User $user */
-        $post = $doctrine->getRepository(Post::class)->find($id);
+        $post = $doctrine->getRepository(Post::class)->findOneBy(['uuid' => $uuid]);
         if (in_array($post, $user->getSavedPosts()))
-            return $this->redirectToRoute('app_saves', [], 302, "#" . $id);
+            return $this->redirectToRoute('app_saves', [], 302, "#" . $uuid);
         $newSave = new Save();
         $newSave->setCreationDate();
         $newSave->setUser($user);
-        $newSave->setPost($doctrine->getRepository(Post::class)->find($id));
+        $newSave->setPost($doctrine->getRepository(Post::class)->findOneBy(['uuid' => $uuid]));
         $doctrine->getManager()->persist($newSave);
         $user->addSave($newSave);
         $doctrine->getManager()->persist($user);
@@ -80,11 +80,12 @@ class SaveController extends AbstractController
         return $this->redirectToRoute("app_saves");
     }
 
-    #[Route('/unsave/{id}', name: 'app_unsave')]
-    public function unsave(UserInterface $user, ManagerRegistry $doctrine, $id): Response
+    #[Route('/unsave/{uuid}', name: 'app_unsave')]
+    public function unsave(UserInterface $user, ManagerRegistry $doctrine, $uuid): Response
     {
         $em = $doctrine->getManager();
-        $save = $doctrine->getRepository(Save::class)->findOneBy(["post" => $id, "user" => $user->getId()]);
+        $post = $em->getRepository(Post::class)->findOneBy(['uuid' => $uuid]);
+        $save = $doctrine->getRepository(Save::class)->findOneBy(["post" => $post, "user" => $user->getId()]);
         if ($save) {
             $em->remove($save);
             $em->flush();

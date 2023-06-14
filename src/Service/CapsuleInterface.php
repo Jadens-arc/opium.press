@@ -3,6 +3,7 @@ namespace App\Service;
 use App\Entity\Post;
 use App\Entity\User;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Uid\Uuid;
 
 class CapsuleInterface
 {
@@ -29,6 +30,7 @@ class CapsuleInterface
         $post->setContent($content);
         $post->setTags($tags);
         $post->setSources($sources);
+        $post->setUuid(UUID::v1());
         if (in_array("ROLE_ADMIN", $user->getRoles())) {
             $post->setCreationDateAdmin();
         } else {
