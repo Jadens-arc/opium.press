@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Post;
+use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -19,7 +20,9 @@ class PostType extends AbstractType
     {
         $builder
             ->add('title', TextType::class)
-            ->add('content', TextareaType::class, ["label" => "Speak Your Mind..."])
+            ->add('content', CKEditorType::class, [
+                "label" => "Speak Your Mind...",
+            ])
             ->add('tags', HiddenType::class, )
             ->add('sources', HiddenType::class, )
             ->add('isDraft', HiddenType::class, ["mapped" => false])

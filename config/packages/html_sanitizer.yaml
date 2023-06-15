@@ -1,0 +1,11 @@
+framework:
+  html_sanitizer:
+    sanitizers:
+      app.post_sanitizer:
+        block_elements:
+          - h1
+          - button
+          - script
+          - style
+        allow_safe_elements: true
+        allow_static_elements: true

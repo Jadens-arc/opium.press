@@ -3,3 +3,20 @@
 twig:
     form_themes:
         - '@FOSCKEditor/Form/ckeditor_widget.html.twig'
+
+fos_ck_editor:
+    configs:
+        toolbar:
+            toolbar: "toolbar"
+            contentsCss:
+                - '/css/styles.css'
+
+    toolbars:
+        configs:
+            toolbar: [ "@document"]
+        items:
+            document: [
+                "Maximize", "Bold", "Italic", "Underline", "Strike", "Subscript", "Superscript", "-",
+                "JustifyLeft", "JustifyCenter", "JustifyRight", "JustifyBlock", "-",
+                "Link", "Unlink"
+            ]

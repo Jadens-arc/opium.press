@@ -75,7 +75,7 @@
         <div class="card-text">
             <p id="{{ post.uuid }}-content" class="card-content "
                style="white-space: pre-wrap"
-            >{{ post.content}}</p>
+            >{{ post.content|raw|sanitize_html('app.post_sanitizer') }}</p>
         </div>
     </div>
     {% if post.sources %}

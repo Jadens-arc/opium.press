@@ -38,7 +38,7 @@
     <h5 class="h1">{{ post.title }}</h5>
     <p id="{{ post.uuid }}-content" class="card-content "
        style="white-space: pre-wrap"
-    >{{ post.content}}</p>
+    >{{ post.content|raw }}</p>
     {% if post.sources %}
         <div>
             <h2 class="mt-5">Sources</h2>
