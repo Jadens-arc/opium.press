@@ -10,13 +10,12 @@ fos_ck_editor:
             toolbar: "toolbar"
             contentsCss:
                 - '/css/styles.css'
-
     toolbars:
         configs:
-            toolbar: [ "@document"]
-        items:
-            document: [
+            toolbar: [[
                 "Maximize", "Bold", "Italic", "Underline", "Strike", "Subscript", "Superscript", "-",
                 "JustifyLeft", "JustifyCenter", "JustifyRight", "JustifyBlock", "-",
-                "Link", "Unlink"
-            ]
+                "Link", "Unlink", "Code"
+            ]]
+            extraPlugins:
+                - 'codesnippet'
