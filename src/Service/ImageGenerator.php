@@ -48,7 +48,7 @@ class ImageGenerator
 
 
         // story content with wrapping
-        $content = explode(" ", $post->getContent());
+        $content = explode(" ", strip_tags($post->getContent()));
         $wrappedContent = [""];
         $contentLine = 0;
         $fontsize = 60;
