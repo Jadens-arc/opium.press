@@ -184,3 +184,7 @@ html {
     border: 1px solid #d1d1d1 !important;
     overflow: hidden;
 }
+
+a {
+    color: #0D6EFDFF;
+}
