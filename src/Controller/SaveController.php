@@ -46,7 +46,10 @@ class SaveController extends AbstractController
         $posts = $em->getRepository(Post::class)
             ->createQueryBuilder('p')
             ->where('p in (:saves)')
+            ->leftJoin(Save::class, 's', Join::WITH, 's.post = p.id')
+            ->orderBy('s.creationDate', 'desc')
             ->setParameter('saves', $saveIds);
+
 
         $adapter = new QueryAdapter($posts);
         $pagerfanta = new Pagerfanta($adapter);
