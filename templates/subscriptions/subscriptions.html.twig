@@ -4,14 +4,19 @@
 
 {% block content %}
     <h1>{{ title }}</h1>
-    <div style="scrollbar-width: none;" class="d-flex flex-row overflow-scroll pb-3">
-        {% for subscription in subscriptions %}
-            <a class href="{{ path("app_writer", {"username": subscription.username}) }}">
-                <span class="btn btn-primary mx-1">
-                    @{{ subscription.username }}
-                </span>
-            </a>
-        {% endfor %}
+    <div class="d-flex flex-row justify-content-between">
+        <div style="scrollbar-width: none;" class="d-flex flex-row overflow-scroll pb-3">
+            {% for subscription in subscriptions %}
+                <a class href="{{ path("app_writer", {"username": subscription.username}) }}">
+                    <span class="btn btn-primary mx-1">
+                        @{{ subscription.username }}
+                    </span>
+                </a>
+            {% endfor %}
+        </div>
+        <a href="{{ path("app_saves") }}" class="btn btn-primary" style="height: fit-content; width: fit-content">
+            <span>Saves</span>
+        </a>
     </div>
     {% include 'capsules.html.twig' %}
     <div class="m-4">
