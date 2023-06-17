@@ -152,6 +152,10 @@ html {
 .cke_button_icon {
     filter: invert() !important;
 }
+.cke_button:hover {
+    background-color: transparent !important;
+}
+
 .cke_button_on {
     background-color: var(--bs-body-bg) !important;
     border: 1px solid var(--bs-body-color) !important;
@@ -187,4 +191,43 @@ html {
 
 a {
     color: #0D6EFDFF;
+}
+
+.cke_dialog_body {
+    background-color: black !important;
+}
+.cke_dialog_title {
+    background-color: var(--bs-body-bg) !important;
+    color: var(--bs-body-color) !important;
+}
+
+.cke_dialog_contents_body {
+    background-color: var(--bs-body-bg) !important;
+    color: var(--bs-body-color) !important;
+}
+
+.cke_dialog_ui_input_textarea {
+    background-color: var(--bs-body-bg) !important;
+    color: var(--bs-body-color) !important;
+}
+
+.cke_dialog_ui_input_select {
+    background-color: var(--bs-body-bg) !important;
+    color: var(--bs-body-color) !important;
+}
+
+.cke_dialog_ui_labeled_label {
+    color: var(--bs-body-color) !important;
+}
+.cke_dialog_footer {
+    background-color: var(--bs-body-bg) !important;
+    color: var(--bs-body-color) !important;
+}
+.hljs {
+    background-color: var(--bs-body-bg) !important;
+    color: var(--bs-body-color) !important;
+}
+
+.hljs * {
+    color: var(--bs-body-color) !important;
 }

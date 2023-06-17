@@ -14,8 +14,8 @@ fos_ck_editor:
         configs:
             toolbar: [[
                 "Maximize", "Bold", "Italic", "Underline", "Strike", "Subscript", "Superscript", "-",
-                "JustifyLeft", "JustifyCenter", "JustifyRight", "JustifyBlock", "-",
-                "NumberedList", "BulletedList", "Link", "Unlink", "Code"
+                "JustifyLeft", "JustifyCenter", "JustifyRight", "JustifyBlock", "Indent", "Outdent", "-",
+                "NumberedList", "BulletedList", "Link", "Unlink", "CodeSnippet"
             ]]
             extraPlugins:
                 - 'Codesnippet'

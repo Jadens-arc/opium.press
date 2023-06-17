@@ -22,6 +22,9 @@ class PostType extends AbstractType
             ->add('title', TextType::class)
             ->add('content', CKEditorType::class, [
                 "label" => "Speak Your Mind...",
+                'config' => [
+                    'extraPlugins' => 'codesnippet',
+                ],
             ])
             ->add('tags', HiddenType::class, )
             ->add('sources', HiddenType::class, )
