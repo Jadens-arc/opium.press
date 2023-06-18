@@ -10,12 +10,12 @@
                     <img src="/brands/instagram.svg" class="icon mx-2" style="width: 1rem;" alt="">
                 </a>
                 <span class="d-block mx-2 fw-bold text-capitalize">{{ post.creator.displayName }}</span>
-                <a class="d-block mx-2 fw-light text-muted" href="/writer/{{ post.creator.username }}">@{{ post.creator.username }}</a>
+                <a class="d-block  fw-light text-muted" href="/writer/{{ post.creator.username }}">@{{ post.creator.username }}</a>
             </div>
             <div class="col-sm">
                 <div class="row flex-grow-0">
                     {% if post.creationDate %}
-                        <span class="col-sm text-muted flex-grow-1">{{ post.creationDate.format('Y-m-d H:i:s') }}</span>
+                        <span class="col-sm text-muted flex-grow-1">{{ post.creationDate.format('M d, Y H:i A') }}</span>
                     {% endif %}
                 </div>
             </div>

@@ -54,7 +54,7 @@
         <div class="m-2">
             <span class="d-block">
                 {% if post.creationDate %}
-                    <span class="text-muted">{{ post.creationDate | format_datetime(locale='en', pattern="MMMM dd, yyyy 'at' h:m a", timezone='America/Los_Angeles') }}</span>
+                    <span class="text-muted">{{ post.creationDate.format('M d, Y H:i A') }}</span>
                 {% endif %}
                 {% if post.isInEmbargo %}
                     <div class="progress {{ (post.tags) ? "my-2" }}">
