@@ -231,3 +231,7 @@ a {
 .hljs * {
     color: var(--bs-body-color) !important;
 }
+
+pre[class*="language-"] {
+    border-radius: 0.375rem;
+}
