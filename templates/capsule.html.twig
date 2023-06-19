@@ -68,6 +68,9 @@
             {% if post.reply %}
                 <a href="{{ path('app_view_capsule', {'uuid': post.reply.uuid}) }}">Replying to {{ post.reply.title }}</a>
             {% endif %}
+            {% if post.getPublicReplies| length > 0 %}
+                <a href="{{ path('app_capsule_replies', {'uuid': post.uuid}) }}">Show Replies</a>
+            {% endif %}
         </div>
     {% endif %}
     <div class="card-body">

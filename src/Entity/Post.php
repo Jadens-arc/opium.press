@@ -187,6 +187,20 @@ class Post
         return $this->replies;
     }
 
+    /**
+     * @return array
+     */
+    public function getPublicReplies(): array
+    {
+        $replies = [];
+        foreach ($this->replies as $reply) {
+            if (!$reply->isInEmbargo()) {
+                $replies[] = $reply;
+            }
+        }
+        return $replies;
+    }
+
     public function addReply(self $reply): self
     {
         if (!$this->replies->contains($reply)) {

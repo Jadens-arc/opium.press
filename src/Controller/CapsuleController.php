@@ -7,7 +7,10 @@ use App\Entity\User;
 use App\Form\PostType;
 use App\Service\ImageGenerator;
 use DateTime;
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
+use Pagerfanta\Doctrine\ORM\QueryAdapter;
+use Pagerfanta\Pagerfanta;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -164,6 +167,37 @@ class CapsuleController extends AbstractController
             return $this->redirectToRoute('app_drafts');
         }
         return $this->redirectToRoute('app_homepage');
+    }
+
+
+    #[Route('/capsule/replies/{uuid}', name: 'app_capsule_replies')]
+    public function replies(Request $request, ManagerRegistry $doctrine, UserInterface $user, $uuid): Response
+    {
+        $post = $doctrine->getRepository(Post::class)->findOneBy(["uuid" => UUid::fromString($uuid)->toBinary()]);
+
+
+        $currentDate = new DateTime();
+        $currentDate->modify("-3 day");
+        $currentDate = $currentDate->format('Y-m-d H:i:s');
+
+        $posts = $doctrine->getRepository(Post::class)->createQueryBuilder('p')
+            ->where('p.reply = :post')
+            ->andWhere('p.creationDate < :currentDate')
+            ->setParameter('currentDate', $currentDate)
+            ->setParameter('post', $post);
+
+
+        $adapter = new QueryAdapter($posts);
+        $pagerfanta = new Pagerfanta($adapter);
+
+        $title =  "Latest Capsules... ";
+
+        if (isset($_GET["page"])) {
+            $pagerfanta->setCurrentPage($_GET["page"]);
+            $title = " Page " . $_GET["page"] . " of " . $title;
+        }
+
+        return $this->render('capsule/replies.html.twig', ["title" => "Showing Replies",  "posts"=>$pagerfanta->getCurrentPageResults(), 'pager' => $pagerfanta]);
     }
 
     #[Route('/capsule/post_draft/{uuid}', name: 'app_capsule_post_draft')]
