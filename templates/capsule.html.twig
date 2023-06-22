@@ -51,7 +51,7 @@
         </div>
     </h6>
     {% if post.creationDate or post.tags or post.reply%}
-        <div class="m-2">
+        <div class="mx-2">
             <span class="d-block">
                 {% if post.creationDate %}
                     <span class="text-muted">{{ post.creationDate.format('M d, Y h:i A') }}</span>
@@ -74,7 +74,9 @@
         </div>
     {% endif %}
     <div class="card-body">
-        <h5 class="card-title">{{ post.title }}</h5>
+        <a style="text-decoration: none;" href="{{ path('app_view_capsule', {uuid: post.uuid}) }}">
+            <h5 class="card-title">{{ post.title }}</h5>
+        </a>
         <div class="card-text">
             <p id="{{ post.uuid }}-content" class="card-content "
                style="white-space: pre-wrap"
