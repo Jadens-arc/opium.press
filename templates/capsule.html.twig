@@ -81,20 +81,4 @@
             >{{ post.content|raw|sanitize_html('app.post_sanitizer') }}</p>
         </div>
     </div>
-    {% if post.sources %}
-        <div class="card-footer">
-            <b>Sources:</b>
-            <ul class="mb-0">
-                {% for source in post.sources %}
-                    <li>
-                        {% if "https://" in source or "http://" in source %}
-                            <a href="{{ source }}">{{ source }}</a>
-                        {% else %}
-                            <span class="m-0">{{ source }}</span>
-                        {% endif %}
-                    </li>
-                {% endfor %}
-            </ul>
-        </div>
-    {% endif %}
 </div>

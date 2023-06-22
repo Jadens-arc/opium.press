@@ -28,9 +28,6 @@ class Post
     #[ORM\Column(type: 'datetime', nullable: true)]
     private $creationDate;
 
-    #[ORM\Column(type: 'array', nullable: true)]
-    private $sources = [];
-
     #[ORM\ManyToOne(inversedBy: 'posts')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $creator = null;
@@ -139,18 +136,6 @@ class Post
     public function setCreationDateAdmin(): self
     {
         $this->creationDate = new \DateTime("-3 day");
-
-        return $this;
-    }
-
-    public function getSources(): ?array
-    {
-        return $this->sources;
-    }
-
-    public function setSources(?array $sources): self
-    {
-        $this->sources = $sources;
 
         return $this;
     }

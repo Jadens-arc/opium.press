@@ -49,8 +49,6 @@ class CapsuleController extends AbstractController
             $form = $this->createForm(PostType::class, $post);
             if ($post->getTags())
                 $form['tagInput']->setData(implode(",", $post->getTags()));
-            if ($post->getSources())
-                $form['sourceInput']->setData(implode(",", $post->getSources()));
             if ($post->getReply()) {
                 $reply = $post->getReply();
                 $form['reply']->setData($reply->getId());
@@ -58,7 +56,6 @@ class CapsuleController extends AbstractController
             }
         } else { // completely new post
             $post->tagInput = "";
-            $post->sourceInput = "";
             $post->setUuid(UUID::v1());
             if ($request->get("replying-to")) {
                 $reply = $doctrine->getRepository(Post::class)->findOneBy(
@@ -97,10 +94,6 @@ class CapsuleController extends AbstractController
                 $newTags = $post->getTags();
                 array_push($newTags, "haute maison");
                 $post->setTags($newTags);
-            }
-            $sourceInput = $form['sourceInput']->getData();
-            if (strlen(trim($sourceInput)) > 0) {
-                $post->setSources(explode(",", $sourceInput));
             }
             if ($form['reply']->getData())
                 $post->setReply($em->getRepository(Post::class)->find($form['reply']->getData()));

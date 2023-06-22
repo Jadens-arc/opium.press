@@ -39,20 +39,4 @@
     <p id="{{ post.uuid }}-content" class="card-content "
        style="white-space: pre-wrap"
     >{{ post.content|raw }}</p>
-    {% if post.sources %}
-        <div>
-            <h2 class="mt-5">Sources</h2>
-            <ul>
-                {% for source in post.sources %}
-                    <li>
-                        {% if "https://" in source or "http://" in source %}
-                            <a href="{{ source }}">{{ source }}</a>
-                        {% else %}
-                            <span>{{ source }}</span>
-                        {% endif %}
-                    </li>
-                {% endfor %}
-            </ul>
-        </div>
-    {% endif %}
 {% endblock %}
