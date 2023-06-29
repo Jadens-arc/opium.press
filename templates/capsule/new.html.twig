@@ -116,65 +116,16 @@
             }
         })
 
-        let post_sourceInput = document.getElementById('post_sourceInput');
-        let sourceList = document.getElementById('sourceList');
-
-        let sources = [];
-
-        function appendSource(sourceName) {
-            if (!sourceName) return;
-            sourceName.split(',').forEach(source => {
-                sources.push(source);
-
-                let newSource = document.createElement('li');
-                newSource.innerText = source
-                newSource.classList.add('list-group-item')
-
-                newSource.addEventListener("mouseover", (e) => {
-                    newSource.classList.add("list-group-item-danger")
-                })
-
-                newSource.addEventListener("mouseout", (e) => {
-                    newSource.classList.remove("list-group-item-danger")
-                })
-
-                newSource.addEventListener("click", (e) => {
-                    newSource.remove()
-                    sources.splice(sources.length - 1, 1)
-                })
-
-                sourceList.appendChild(newSource)
-            })
-        }
-
-        post_sourceInput.addEventListener('keypress', (e) => {
-            if (e.key === "Enter") {
-                e.preventDefault()
-                appendSource(post_sourceInput.value)
-                post_sourceInput.value = ""
-            }
-        })
-
-
         appendTag(post_tagInput.value)
         post_tagInput.value = ""
-        appendSource(post_sourceInput.value)
-        post_sourceInput.value = ""
 
         document.addEventListener("submit", (e) => {
             post_tagInput.value = ""
-            post_sourceInput.value = ""
 
             tags.forEach((tag, index) => {
                 post_tagInput.value += tag;
                 if (index < tags.length - 1) {
                     post_tagInput.value += ",";
-                }
-            })
-            sources.forEach((source, index) => {
-                post_sourceInput.value += source;
-                if (index < sources.length - 1) {
-                    post_sourceInput.value += ",";
                 }
             })
         })
