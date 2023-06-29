@@ -51,7 +51,7 @@
         </div>
     </h6>
     {% if post.creationDate or post.tags or post.reply%}
-        <div class="m-2">
+        <div class="m-2 mb-0">
             <span class="d-block">
                 {% if post.creationDate %}
                     <span class="text-muted">{{ post.creationDate.format('M d, Y h:i A') }}</span>
