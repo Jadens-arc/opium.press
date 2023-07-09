@@ -63,7 +63,10 @@
                 {% endif %}
             </span>
             {% for tag in post.tags %}
-                <a href="{{ path('app_homepage', {'q': '#' ~ tag}) }}"  style="text-decoration: none;" class="badge text-bg-primary mx-1">#{{ tag }}</a>
+                <a
+                        href="{{ path('app_homepage', {'q': '#' ~ tag}) }}"
+                        style="text-decoration: none;"
+                        class="badge text-bg-primary {{ tag == "haute maison" ? "text-bg-secondary" }} mx-1">#{{ tag }}</a>
             {% endfor %}
             {% if post.reply %}
                 <a href="{{ path('app_view_capsule', {'uuid': post.reply.uuid}) }}">Replying to {{ post.reply.title }}</a>

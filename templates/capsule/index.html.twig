@@ -25,7 +25,10 @@
     <div class="d-flex flex-row mb-3">
         <div class="d-flex flex-row" style="overflow-y: hidden; scrollbar-width: none;">
             {% for tag in post.tags %}
-                <a href="{{ path('app_homepage', {'q': '#' ~ tag}) }}"  style="text-decoration: none; height: fit-content;" class="badge text-bg-primary mx-1">#{{ tag }}</a>
+                <a
+                        href="{{ path('app_homepage', {'q': '#' ~ tag}) }}"
+                        style="text-decoration: none; height: fit-content"
+                        class="badge text-bg-primary {{ tag == "haute maison" ? "text-bg-secondary" }} mx-1">#{{ tag }}</a>
             {% endfor %}
         </div>
     </div>
