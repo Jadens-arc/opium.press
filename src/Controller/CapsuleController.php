@@ -52,8 +52,19 @@ class CapsuleController extends AbstractController
             $isDraft = $form->get("saveToDrafts")->isClicked();
             if (!$isDraft) $post->setCreationDate(); // creation date will be null if post is draft
 
+            // Handle Admin Stuff
+            if (in_array(User::$ROLE_ADMIN, $user->getRoles())) {
+                $post->setCreationDate(new \DateTime("-3 days"));
+                if (!in_array("haute maison", $post->getTags())) {
+                    $tags = $post->getTags();
+                    $tags[] = "haute maison";
+                    $post->setTags($tags);
+                }
+            }
+
             $doctrine->getManager()->persist($post);
             $doctrine->getManager()->flush();
+
             return $this->redirectToRoute($isDraft ? "app_drafts" : "app_embargo");
         }
 
