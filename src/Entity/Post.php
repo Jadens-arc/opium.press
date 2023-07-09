@@ -48,6 +48,7 @@ class Post
     {
         $this->replies = new ArrayCollection();
         $this->saves = new ArrayCollection();
+        $this->uuid = Uuid::v1();
     }
 
     public function getId(): ?int

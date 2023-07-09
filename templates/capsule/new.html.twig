@@ -1,16 +1,12 @@
 {% extends "base.html.twig" %}
 {% block title %}| New Capsule{% endblock %}
 {% block content %}
-    {% if data['replying-to'] is defined %}
-    <h1>Replying To {{ data['replying-to'].creator.displayName }}</h1>
-        {% include 'capsule.html.twig' with {'post': data['replying-to']} %}
+    {% if post.reply %}
+    <h1>Replying To {{ post.reply.title }}</h1>
+        {% include 'capsule.html.twig' with {'post': post.reply} %}
     {% else %}
         <h1>New Capsule</h1>
     {% endif %}
-{#    <div class="alert alert-secondary">#}
-{#        <span>All capsules go through a 3-day embargo. After they leave the embargo they cannot be deleted. <a#}
-{#                    href="{{ path('app_about') }}">Learn more here</a></span>#}
-{#    </div>#}
     {{ form_start(form) }}
         <div class="my-custom-class-for-errors">
             {{ form_errors(form) }}
@@ -20,32 +16,28 @@
             {{ form_widget(form.title, {'attr': {'class': 'form-control'}}) }}
         </div>
 
-        <div class="row">
-            <div class="col-sm">
-                <label class="form-label">{{ form_label(form.tagInput) }}</label>
-
-                <ul class="mb-3 list-group" id="tagList">
-                </ul>
-
-                <div class="mb-3">
-                    {{ form_widget(form.tagInput, {'attr': {'class': 'form-control', 'placeholder': 'ex: #hello (don\'t forget to hit enter)'}}) }}
-                </div>
-            </div>
+        <label for="tag-input" class="form-label">Tags</label>
+        <div class="tags mb-3"
+             data-index="{{ form.tags|length > 0 ? form.tags|last.vars.name + 1 : 0 }}"
+             data-prototype="{{ form_widget(form.tags.vars.prototype)|e('html_attr') }}"
+             id="tags"
+        >
+            {% for tag in form.tags %}
+                <div class="tag">{{ tag.vars.value }}</div>
+            {% endfor %}
+            <input name="tag-input" type="text" class="tag-input" placeholder="Type Tags Here" id="tag-input">
         </div>
-
 
         <div class="mb-3">
             <label class="form-label">{{ form_label(form.content) }}</label>
             {{ form_widget(form.content, {'attr': {'class': 'form-control', 'rows': '10'}}) }}
         </div>
 
-        {{ form_row(form.isDraft) }}
-        {{ form_row(form.reply) }}
         {{ form_row(form._token) }}
         <div class="d-flex justify-content-between mb-5">
             <div class="">
                 {{ form_widget(form.submit, {'attr': {'class': 'btn btn-primary'}}) }}
-                <button id="saveToDrafts" class="btn btn-secondary">Save to Drafts</button>
+                {{ form_widget(form.saveToDrafts, {'attr': {'class': 'btn btn-secondary'}}) }}
             </div>
             <a class="btn btn-outline-secondary" href="{{ url('app_view_capsule', {uuid: 91}) }}">Learn more</a>
         </div>
@@ -54,80 +46,54 @@
 
 {% block javascripts %}
     <script defer>
-        let saveToDrafts = document.getElementById('saveToDrafts');
-        let post_isDraft = document.getElementById('post_isDraft');
-        saveToDrafts.addEventListener('click', () => {
-            post_isDraft.value = true;
-        });
+        const tags = document.getElementById("tags");
+        const tagInput = document.getElementById("tag-input");
 
-        let post_content = document.getElementById('post_content');
-        post_content.addEventListener('keyup', () => {
-            if (post_content.value) {
-                // post_content.rows = Math.max(((post_content.value.match(/\n/g)) || []).length + 1, 10);
-            }
-        });
-        post_content.addEventListener('keydown', (e) => {
-            if (e.key == 'Tab') {
-                e.preventDefault();
-                let start = post_content.selectionStart;
-                let end = post_content.selectionEnd;
-
-                post_content.value = post_content.value.substring(0, start) +
-                    "\t" + post_content.value.substring(end);
-
-                post_content.selectionStart =
-                    post_content.selectionEnd = start + 1;
-            }
-        });
-
-        if (post_content.value) {
-            post_content.rows = Math.max(((post_content.value.match(/\n/g)) || []).length + 1, 10);
-        }
-
-        let post_tagInput = document.getElementById('post_tagInput');
-        let tagList = document.getElementById('tagList');
-
-        let tags = [];
-
-        function appendTag(tagName) {
-            if (!tagName) return;
-            tagName.split(',').forEach(tag => {
-                tag = tag.replace('#', '');
-                tags.push(tag);
-
-                let newTag = document.createElement('li');
-                newTag.innerText = "#" + tag
-                newTag.classList.add('list-group-item')
-
-                newTag.addEventListener("click", (e) => {
-                    newTag.remove()
-                    tags.splice(tags.length-1, 1)
-                })
-
-                tagList.appendChild(newTag)
-            });
-        }
-
-        post_tagInput.addEventListener('keypress', (e) => {
-            if (e.key === "Enter") {
-                e.preventDefault()
-                appendTag(post_tagInput.value)
-                post_tagInput.value = ""
-            }
-        })
-
-        appendTag(post_tagInput.value)
-        post_tagInput.value = ""
-
-        document.addEventListener("submit", (e) => {
-            post_tagInput.value = ""
-
-            tags.forEach((tag, index) => {
-                post_tagInput.value += tag;
-                if (index < tags.length - 1) {
-                    post_tagInput.value += ",";
-                }
+        const addDeleteToTag = (tag) => {
+            tag.addEventListener("click", (e) => {
+                tag.remove()
             })
-        })
+        }
+
+        const addFormToCollection = (value) => {
+            const item = document.createElement('div');
+            item.classList.add('tag');
+            item.innerHTML = tags
+                .dataset
+                .prototype
+                .replace(
+                    /__name__/g,
+                    tags.dataset.index
+                );
+            item.firstChild.style = "display: none;";
+            item.firstChild.value = value;
+            const text = document.createElement("span");
+            text.innerText = value;
+            item.appendChild(text);
+
+            addDeleteToTag(item);
+
+            tags.insertBefore(item, tagInput);
+
+            tags.dataset.index++;
+        };
+
+
+        document
+            .getElementById("tag-input")
+            .addEventListener("keydown", (e) => {
+                if (e.key === "Enter") {
+                    e.preventDefault()
+                    if (e.target.value === "") return;
+                    addFormToCollection(e.target.value)
+                    e.target.value = "";
+                }
+            });
+
+        document
+            .querySelectorAll('.tag')
+            .forEach(tag => {
+                addDeleteToTag(tag);
+            });
     </script>
 {% endblock %}

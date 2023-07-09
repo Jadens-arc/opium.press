@@ -37,80 +37,27 @@ class CapsuleController extends AbstractController
     #[Route('/capsule/edit/{uuid}', name: 'app_new_capsule')]
     public function newCapsule(Request $request, ManagerRegistry $doctrine, UserInterface $user, $uuid): Response
     {
-        $post = new Post();
-        $post->setCreator($user);
+        $post = $uuid != "new" ? $doctrine->getRepository(Post::class)->findOneBy(['uuid' => Uuid::fromString($uuid)->toBinary()]) : new Post();
+        if (!$post->getCreator()) $post->setCreator($user);
+        if ($post->getCreator() != $user || $post->getCreationDate()) return $this->redirectToRoute('app_homepage');
+        if ($request->get("replying-to"))
+            $post->setReply($doctrine->getRepository(Post::class)->findOneBy(
+                ['uuid' => Uuid::fromString($request->get('replying-to'))->toBinary()])
+            );
 
-        $data=[];
-
-        $form = $this->createForm(PostType::class);
-        if ($uuid != "new") { // editing draft
-            $post = $doctrine->getRepository(Post::class)->findOneBy(['uuid' => $uuid]);
-            $post->setCreator($user);
-            $form = $this->createForm(PostType::class, $post);
-            if ($post->getTags())
-                $form['tagInput']->setData(implode(",", $post->getTags()));
-            if ($post->getReply()) {
-                $reply = $post->getReply();
-                $form['reply']->setData($reply->getId());
-                $data['replying-to'] = $reply;
-            }
-        } else { // completely new post
-            $post->tagInput = "";
-            $post->setUuid(UUID::v1());
-            if ($request->get("replying-to")) {
-                $reply = $doctrine->getRepository(Post::class)->findOneBy(
-                    ['uuid' => $request->get("replying-to")]
-                );
-                $post->setReply($reply);
-                $form['reply']->setData($reply->getId());
-                $data['replying-to'] = $reply;
-            }
-        }
+        $form = $this->createForm(PostType::class, $post);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $doctrine->getManager();
-            $userData = $em->find(User::class, $user->getId());
-            $formData = $form->getData();
-            if (!$form['isDraft']->getData()) {
-                if (in_array("ROLE_ADMIN", $user->getRoles())) {
-                    $post->setCreationDateAdmin();
-                } else {
-                        $post->setCreationDate();
-                }
-            }
-            $post->setCreator($user);
-            $tagInput = $form['tagInput']->getData();
-            if (strlen(trim($tagInput)) > 0) {
-                $tags = $tagInput;
-                if (!in_array("ROLE_ADMIN", $user->getRoles())) {
-                    $tags = str_replace("haute maison", "", str_replace("haute maison,", "", $tagInput));
-                }
-                $post->setTags(explode(",", $tags));
-            } else {
-                $post->setTags([]);
-            }
-            if (in_array("ROLE_ADMIN", $user->getRoles())) {
-                $newTags = $post->getTags();
-                array_push($newTags, "haute maison");
-                $post->setTags($newTags);
-            }
-            if ($form['reply']->getData())
-                $post->setReply($em->getRepository(Post::class)->find($form['reply']->getData()));
+            $isDraft = $form->get("saveToDrafts")->isClicked();
+            if (!$isDraft) $post->setCreationDate(); // creation date will be null if post is draft
 
-            $post->setTitle($form['title']->getData());
-            $post->setContent($form['content']->getData());
-
-            if ($form['isDraft']->getData()) {
-                $em->merge($post);
-                $em->flush();
-                return $this->redirectToRoute('app_drafts');
-            }
-            $em->persist($post);
-            $em->flush();
-            return $this->redirectToRoute('app_embargo');
+            $doctrine->getManager()->persist($post);
+            $doctrine->getManager()->flush();
+            return $this->redirectToRoute($isDraft ? "app_drafts" : "app_embargo");
         }
-        return $this->renderForm('capsule/new.html.twig', ["form"=>$form, "data" => $data]);
+
+        return $this->renderForm('capsule/new.html.twig', ["form" => $form, "post" => $post]);
     }
 
     #[Route('/capsule/delete/{uuid}', name: 'app_delete_capsule')]

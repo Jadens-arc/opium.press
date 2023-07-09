@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Post;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -26,11 +27,20 @@ class PostType extends AbstractType
                     'extraPlugins' => 'codesnippet',
                 ],
             ])
-            ->add('tags', HiddenType::class, )
-            ->add('isDraft', HiddenType::class, ["mapped" => false])
-            ->add('reply', HiddenType::class, ["mapped" => false])
-            ->add('tagInput', TextType::class, ["label" => "Add Tags", "required" => false, "mapped" => false])
+            ->add('tags', CollectionType::class, [
+                'entry_type' => TextType::class,
+                'allow_add' => true,
+                'allow_delete' => true,
+                'prototype' => true,
+                'prototype_data' => 'New Tag Placeholder',
+            ])
+            ->add('reply', EntityType::class, [
+                'class' => Post::class,
+                'choice_label' => 'title',
+                'placeholder' => ""
+            ])
             ->add('submit', SubmitType::class, ["label" => "Post"])
+            ->add('saveToDrafts', SubmitType::class, ["label" => "Save to Drafts"])
         ;
     }
 
