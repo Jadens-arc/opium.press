@@ -268,5 +268,5 @@ pre[class*="language-"] {
     width: 100%;
     min-width: 15ch;
     color: var(--bs-body-color);
-    padding: 6px 10px;
+    padding: 6px 11px;
 }
