@@ -53,7 +53,7 @@ class WriterController extends AbstractController
     }
 
     #[Route('/writer/share/{username}', name: "app_share_writer")]
-    public function share(Request $request, ManagerRegistry $doctrine, UserInterface $user, ImageGenerator $imageGenerator, $username): Response {
+    public function share(Request $request, ManagerRegistry $doctrine, ImageGenerator $imageGenerator, $username): Response {
         $user = $doctrine->getRepository(User::class)->findOneBy(['username' => $username]);
         $filepath = $imageGenerator->writerStory($user);
         return $this->render('capsule/share.html.twig', [
