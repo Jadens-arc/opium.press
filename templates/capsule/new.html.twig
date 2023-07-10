@@ -2,8 +2,10 @@
 {% block title %}| New Capsule{% endblock %}
 {% block content %}
     {% if post.reply %}
-    <h1>Replying To {{ post.reply.title }}</h1>
+        <h1>Replying To {{ post.reply.title }}</h1>
         {% include 'capsule.html.twig' with {'post': post.reply} %}
+    {% elseif post.title %}
+        <h1>Editing {{ post.title }}</h1>
     {% else %}
         <h1>New Capsule</h1>
     {% endif %}
