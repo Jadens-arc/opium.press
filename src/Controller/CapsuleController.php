@@ -29,6 +29,7 @@ class CapsuleController extends AbstractController
         $post = $doctrine->getRepository(Post::class)->findOneBy(["uuid" => $uuid]);
         $filepath = $imageGenerator->capsuleStory($post);
         return $this->render('capsule/share.html.twig', [
+            'post' => $post,
             'src' => $filepath,
             'url' => $this->generateUrl('app_view_capsule', ['uuid' => $uuid], UrlGenerator::ABSOLUTE_URL)
         ]);

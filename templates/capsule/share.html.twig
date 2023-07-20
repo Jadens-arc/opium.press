@@ -6,18 +6,26 @@
             <img src="{{ src }}"
                  height="600vh"
                  class="story rounded mb-5">
-            <a download href="{{ src }}" id="saveImage" class="btn btn-primary">Save Image</a>
+            <a download id="shareImage" class="btn btn-primary">Share to Story</a>
         </div>
         <div class="col-sm d-flex flex-column justify-content-center align-items-center">
-            <h1>Post the image</h1>
             <h1 class="mb-5">Use this link</h1>
             <p class="alert alert-secondary">{{ url }}</p>
         </div>
     </div>
     <script>
-        let saveBtn = document.getElementById('saveImage');
-        saveBtn.addEventListener('click', (e) => {
-            window.location = 'instagram-stories://share';
+        const shareButton = document.getElementById('shareImage');
+
+        shareButton.addEventListener('click', (e) => {
+            if (navigator.share) {
+                navigator.share({
+                    title: "{{ post.title }}",
+                    text: "By {{ post.creator.displayName }}",
+                    url: "{{ src }}"
+                });
+            } else {
+                window.location = "{{ src }}";
+            }
         });
     </script>
 {% endblock %}
