@@ -20,7 +20,7 @@
             if (navigator.share) {
                 navigator.share({
                     title: "@{{ writer.username }} on Opium.Press",
-                    text: "By {{ writer.displayName }}",
+                    text: "{{ writer.displayName }}",
                     url: "{{ src }}"
                 });
             } else {
