@@ -73,7 +73,7 @@ class ImageGenerator
         imagettftext($im, 50, 0, 300, 1691, $bg,  $titlefont, "Link Goes Here");
 
 
-        $filename = $post->getCreator()->getId() . "-" . $post->getId() . ".png";
+        $filename = $post->getCreator()->getUsername() . "-" . $post->getUuid() . ".png";
         $fullpath = $this->path . $filename;
         imagepng($im, $fullpath);
         imagedestroy($im);
@@ -136,7 +136,7 @@ class ImageGenerator
         imagettftext($im, 50, 0, 300, 1691, $bg,  $titlefont, "Link Goes Here");
 
 
-        $filename = $user->getId() . ".png";
+        $filename = $user->getUsername() . ".png";
         $fullpath = $this->path . $filename;
         imagepng($im, $fullpath);
         imagedestroy($im);
