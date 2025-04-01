@@ -1,0 +1,7 @@
+opium.jadenarceneaux.local {
+    root * /app/public
+    encode gzip
+
+    php_fastcgi php-fpm:9000
+    file_server
+}

@@ -1,0 +1,47 @@
+services:
+  php-fpm:
+    build: .
+    container_name: php-fpm
+    env_file:
+      - .env
+    volumes:
+      - ./app:/app # Mount the Symfony app correctly
+      - vendor:/app/vendor
+    networks:
+      - opium
+    depends_on:
+      - mysql
+  caddy:
+    image: caddy:latest
+    container_name: caddy
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - opium
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - ./app:/app # Ensure Caddy sees the Symfony project
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - php-fpm
+  mysql:
+    image: mysql:latest
+    container_name: mysql
+    env_file: .env
+    networks:
+      - opium
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+networks:
+  opium:
+    driver: bridge
+
+volumes:
+  caddy_data:
+  caddy_config:
+  hugo_public:
+  mysql_data:
+  vendor:
