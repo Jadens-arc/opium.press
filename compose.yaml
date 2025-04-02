@@ -34,7 +34,6 @@ services:
       - opium
     volumes:
       - mysql_data:/var/lib/mysql
-
 networks:
   opium:
     driver: bridge
@@ -42,6 +41,5 @@ networks:
 volumes:
   caddy_data:
   caddy_config:
-  hugo_public:
   mysql_data:
   vendor:
