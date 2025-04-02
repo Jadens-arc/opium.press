@@ -17,3 +17,4 @@ node_modules
 public/shares/*.png
 /app/var
 /app/vendor
+/app/public/shares/*.png
